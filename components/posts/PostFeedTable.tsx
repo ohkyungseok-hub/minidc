@@ -1,0 +1,95 @@
+import Link from "next/link";
+
+import type { PostListItem } from "@/types";
+
+type PostFeedTableProps = {
+  posts: PostListItem[];
+  emptyMessage?: string;
+  pinned?: boolean;
+};
+
+function formatPostDate(value: string) {
+  return new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(value));
+}
+
+export default function PostFeedTable({
+  posts,
+  emptyMessage = "게시글이 없습니다.",
+  pinned = false,
+}: PostFeedTableProps) {
+  if (!posts.length) {
+    return (
+      <div className="rounded-md border border-dashed border-[#cbd5e1] bg-white p-8 text-center text-sm text-slate-500">
+        {emptyMessage}
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-hidden rounded-md border border-[#d5dce7] bg-white">
+      <div className="hidden grid-cols-[90px_minmax(0,1fr)_130px_120px_90px_90px] gap-4 border-b border-[#dfe5ef] bg-[#f8fafc] px-5 py-3 text-xs font-bold tracking-[0.18em] text-slate-500 md:grid">
+        <span>구분</span>
+        <span>제목</span>
+        <span>작성자</span>
+        <span>작성일</span>
+        <span className="text-right">조회</span>
+        <span className="text-right">추천</span>
+      </div>
+      <div className="divide-y divide-[#eef2f7]">
+        {posts.map((post) => (
+          <article
+            key={post.id}
+            className={`px-4 py-4 transition hover:bg-[#f8fbff] md:px-5 ${
+              pinned ? "bg-[#fff9e8]" : ""
+            }`}
+          >
+            <div className="grid gap-2 md:grid-cols-[90px_minmax(0,1fr)_130px_120px_90px_90px] md:items-center md:gap-4">
+              <div className="text-sm font-semibold text-slate-500">
+                {post.is_notice ? (
+                  <span className="inline-flex rounded-sm border border-[#f0c674] bg-[#fff2c8] px-2 py-1 text-xs font-bold text-[#9a6700]">
+                    공지
+                  </span>
+                ) : (
+                  <span className="inline-flex rounded-sm border border-[#d5dce7] bg-[#f8fafc] px-2 py-1 text-xs font-semibold text-slate-500">
+                    일반
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0">
+                <Link
+                  href={`/posts/${post.id}`}
+                  className="block truncate text-sm font-semibold text-slate-900 transition hover:text-[#244a85] md:text-[15px]"
+                >
+                  <span className="truncate">{post.title}</span>
+                </Link>
+                {post.board?.name ? (
+                  <p className="mt-1 text-xs text-slate-400 md:hidden">
+                    {post.board.name}
+                  </p>
+                ) : null}
+              </div>
+              <div className="text-sm text-slate-600 md:text-center">
+                {post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}
+              </div>
+              <div className="text-sm text-slate-500 md:text-center">
+                {formatPostDate(post.created_at)}
+              </div>
+              <div className="text-sm text-slate-500 md:text-right">
+                <span className="md:hidden">조회 </span>
+                {post.view_count}
+              </div>
+              <div className="text-sm font-semibold text-[#244a85] md:text-right">
+                <span className="md:hidden">추천 </span>
+                {post.recommend_count}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
