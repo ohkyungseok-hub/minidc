@@ -357,7 +357,7 @@ let mockPosts: Post[] = [
     id: "post-1",
     board_id: "board-general",
     author_id: "user-demo",
-    title: "mini-dc 구조를 App Router 기준으로 어떻게 나누면 좋을까",
+    title: "BLACKPEARLS 구조를 App Router 기준으로 어떻게 나누면 좋을까",
     content:
       "루트 app 기준으로 auth, boards, posts, api를 나누고 컴포넌트와 lib 계층을 맞추면 이후 기능 추가가 수월합니다.",
     is_notice: true,

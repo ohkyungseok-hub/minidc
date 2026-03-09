@@ -49,7 +49,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               name="nickname"
               type="text"
               required
-              placeholder="mini-dc-user"
+              placeholder="blackpearls-user"
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
             />
           </label>

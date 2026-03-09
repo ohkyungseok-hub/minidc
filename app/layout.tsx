@@ -5,8 +5,8 @@ import Header from "@/components/common/Header";
 
 export const metadata: Metadata = {
   title: {
-    default: "mini-dc",
-    template: "%s | mini-dc",
+    default: "BLACKPEARLS",
+    template: "%s | BLACKPEARLS",
   },
   description: "Supabase 기반으로 확장하기 쉬운 미니 커뮤니티 스캐폴드",
 };

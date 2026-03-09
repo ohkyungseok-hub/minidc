@@ -21,7 +21,7 @@ export default async function Header() {
                 </span>
                 <div>
                   <p className="text-xl font-black tracking-tight text-slate-950">
-                    mini-dc
+                    BLACKPEARLS
                   </p>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2f5ea9]">
                     community board
