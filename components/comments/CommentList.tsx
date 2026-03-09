@@ -32,13 +32,14 @@ export default function CommentList({
         </div>
       ) : null}
       {comments.map((comment) => {
-        const canDelete = currentUserId === comment.author_id && !comment.is_deleted;
+        const isMasked = comment.is_deleted || comment.is_hidden;
+        const canDelete = currentUserId === comment.author_id && !isMasked;
 
         return (
           <article
             key={comment.id}
             className={`rounded-[1.5rem] border p-5 shadow-sm ${
-              comment.is_deleted
+              isMasked
                 ? "border-slate-200 bg-slate-50/90"
                 : "border-black/10 bg-white/90"
             }`}
@@ -50,12 +51,16 @@ export default function CommentList({
             </div>
             <p
               className={`mt-3 whitespace-pre-wrap text-sm leading-7 ${
-                comment.is_deleted ? "italic text-slate-400" : "text-slate-700"
+                isMasked ? "italic text-slate-400" : "text-slate-700"
               }`}
             >
-              {comment.is_deleted ? "삭제된 댓글입니다" : comment.body}
+              {comment.is_deleted
+                ? "삭제된 댓글입니다"
+                : comment.is_hidden
+                  ? "숨김 처리된 댓글입니다"
+                  : comment.body}
             </p>
-            {!comment.is_deleted && canDelete ? (
+            {!isMasked && canDelete ? (
               <div className="mt-4 flex justify-end">
                 <form
                   action={deleteCommentAction.bind(

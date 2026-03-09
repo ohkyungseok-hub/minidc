@@ -7,6 +7,10 @@ const authors: Record<string, UserProfile> = {
     id: "user-demo",
     nickname: "orbit",
     role: "admin",
+    level: 4,
+    warning_count: 0,
+    is_suspended: false,
+    suspended_until: null,
     avatar_url: null,
     created_at: "2026-03-09T09:00:00.000Z",
     updated_at: null,
@@ -15,6 +19,10 @@ const authors: Record<string, UserProfile> = {
     id: "user-luma",
     nickname: "luma",
     role: "user",
+    level: 2,
+    warning_count: 0,
+    is_suspended: false,
+    suspended_until: null,
     avatar_url: null,
     created_at: "2026-03-09T10:00:00.000Z",
     updated_at: null,
@@ -23,6 +31,10 @@ const authors: Record<string, UserProfile> = {
     id: "user-pixel",
     nickname: "pixel",
     role: "user",
+    level: 2,
+    warning_count: 0,
+    is_suspended: false,
+    suspended_until: null,
     avatar_url: null,
     created_at: "2026-03-09T11:00:00.000Z",
     updated_at: null,
@@ -203,7 +215,7 @@ function getMockPopularPosts(options: Required<PopularPostsOptions>) {
   const cutoff = getPopularPostsCutoff(options.days);
 
   return mockPosts
-    .filter((post) => !post.is_notice && post.created_at >= cutoff)
+    .filter((post) => !post.is_notice && !post.is_hidden && post.created_at >= cutoff)
     .map(getMockPostListItem)
     .sort(comparePopularPosts)
     .slice(0, options.limit);
@@ -219,12 +231,12 @@ function getMockBoardFeed(
     post.content.toLowerCase().includes(options.query.toLowerCase());
 
   const notices = mockPosts
-    .filter((post) => post.board?.slug === board.slug && post.is_notice && matchesQuery(post))
+    .filter((post) => post.board?.slug === board.slug && post.is_notice && !post.is_hidden && matchesQuery(post))
     .slice(0, options.noticeLimit)
     .map(getMockPostListItem);
 
   const normalPosts = mockPosts
-    .filter((post) => post.board?.slug === board.slug && !post.is_notice && matchesQuery(post))
+    .filter((post) => post.board?.slug === board.slug && !post.is_notice && !post.is_hidden && matchesQuery(post))
     .sort((left, right) => right.created_at.localeCompare(left.created_at));
 
   const from = (options.page - 1) * options.pageSize;
@@ -271,12 +283,14 @@ type SupabasePostDetailRow = {
   content: string;
   is_notice: boolean;
   is_anonymous: boolean;
+  is_hidden: boolean;
+  hidden_reason: string | null;
   up_count: number | null;
   down_count: number | null;
   view_count: number | null;
   created_at: string;
   updated_at: string | null;
-  author: { id: string; nickname: string; role: "user" | "admin"; avatar_url: string | null; created_at: string; updated_at: string | null } | { id: string; nickname: string; role: "user" | "admin"; avatar_url: string | null; created_at: string; updated_at: string | null }[] | null;
+  author: { id: string; nickname: string; role: "user" | "admin"; level: number; warning_count: number; is_suspended: boolean; suspended_until: string | null; avatar_url: string | null; created_at: string; updated_at: string | null } | { id: string; nickname: string; role: "user" | "admin"; level: number; warning_count: number; is_suspended: boolean; suspended_until: string | null; avatar_url: string | null; created_at: string; updated_at: string | null }[] | null;
   board:
     | { id: string; slug: string; name: string; description: string | null; created_at: string }
     | { id: string; slug: string; name: string; description: string | null; created_at: string }[]
@@ -291,6 +305,8 @@ const postDetailSelect = `
   content,
   is_notice,
   is_anonymous,
+  is_hidden,
+  hidden_reason,
   up_count,
   down_count,
   view_count,
@@ -300,6 +316,10 @@ const postDetailSelect = `
     id,
     nickname,
     role,
+    level,
+    warning_count,
+    is_suspended,
+    suspended_until,
     avatar_url,
     created_at,
     updated_at
@@ -325,6 +345,8 @@ function toPost(record: SupabasePostDetailRow): Post {
     content: record.content,
     is_notice: record.is_notice,
     is_anonymous: record.is_anonymous,
+    is_hidden: record.is_hidden,
+    hidden_reason: record.hidden_reason,
     up_count: record.up_count ?? 0,
     down_count: record.down_count ?? 0,
     view_count: record.view_count ?? 0,
@@ -335,6 +357,10 @@ function toPost(record: SupabasePostDetailRow): Post {
           id: author.id,
           nickname: author.nickname,
           role: author.role,
+          level: author.level,
+          warning_count: author.warning_count,
+          is_suspended: author.is_suspended,
+          suspended_until: author.suspended_until,
           avatar_url: author.avatar_url,
           created_at: author.created_at,
           updated_at: author.updated_at,
@@ -362,6 +388,8 @@ let mockPosts: Post[] = [
       "루트 app 기준으로 auth, boards, posts, api를 나누고 컴포넌트와 lib 계층을 맞추면 이후 기능 추가가 수월합니다.",
     is_notice: true,
     is_anonymous: false,
+    is_hidden: false,
+    hidden_reason: null,
     up_count: 18,
     down_count: 2,
     view_count: 128,
@@ -380,6 +408,8 @@ let mockPosts: Post[] = [
       "로컬 스캐폴드 단계에서는 환경변수가 비어 있어도 렌더가 깨지지 않아야 하므로 null 반환 래퍼가 실용적입니다.",
     is_notice: false,
     is_anonymous: false,
+    is_hidden: false,
+    hidden_reason: null,
     up_count: 27,
     down_count: 4,
     view_count: 224,
@@ -398,6 +428,8 @@ let mockPosts: Post[] = [
       "보드 목록과 글 목록을 카드 레이아웃으로 분리하면 정보 구조가 분명해지고 모바일 대응도 쉬워집니다.",
     is_notice: false,
     is_anonymous: false,
+    is_hidden: false,
+    hidden_reason: null,
     up_count: 15,
     down_count: 1,
     view_count: 97,
@@ -416,6 +448,8 @@ let mockPosts: Post[] = [
       "상호작용 단위별로 route.ts를 분리하면 나중에 서버 액션과 혼합해도 경계가 선명하게 유지됩니다.",
     is_notice: false,
     is_anonymous: false,
+    is_hidden: false,
+    hidden_reason: null,
     up_count: 11,
     down_count: 0,
     view_count: 81,
@@ -428,11 +462,11 @@ let mockPosts: Post[] = [
 ];
 
 export async function getFeaturedPosts() {
-  return mockPosts.filter((post) => !post.is_notice).slice(0, 3);
+  return mockPosts.filter((post) => !post.is_notice && !post.is_hidden).slice(0, 3);
 }
 
 export async function getNoticePosts() {
-  return mockPosts.filter((post) => post.is_notice).slice(0, 5);
+  return mockPosts.filter((post) => post.is_notice && !post.is_hidden).slice(0, 5);
 }
 
 export async function getPopularPosts(options: PopularPostsOptions = {}) {
@@ -451,6 +485,7 @@ export async function getPopularPosts(options: PopularPostsOptions = {}) {
     .from("posts")
     .select(boardPostFeedSelect)
     .eq("is_notice", false)
+    .eq("is_hidden", false)
     .gte("created_at", cutoff)
     .order("up_count", { ascending: false })
     .order("view_count", { ascending: false })
@@ -469,11 +504,11 @@ export async function getHotPosts(options: PopularPostsOptions = {}) {
 }
 
 export async function getPostsByBoardSlug(slug: string) {
-  return mockPosts.filter((post) => post.board?.slug === slug && !post.is_notice);
+  return mockPosts.filter((post) => post.board?.slug === slug && !post.is_notice && !post.is_hidden);
 }
 
 export async function getNoticePostsByBoardSlug(slug: string) {
-  return mockPosts.filter((post) => post.board?.slug === slug && post.is_notice);
+  return mockPosts.filter((post) => post.board?.slug === slug && post.is_notice && !post.is_hidden);
 }
 
 export async function getBoardPostFeedBySlug(
@@ -500,6 +535,7 @@ export async function getBoardPostFeedBySlug(
     .select(boardPostFeedSelect)
     .eq("board_id", board.id)
     .eq("is_notice", true)
+    .eq("is_hidden", false)
     .order("created_at", { ascending: false })
     .limit(resolvedOptions.noticeLimit);
 
@@ -508,6 +544,7 @@ export async function getBoardPostFeedBySlug(
     .select(boardPostFeedSelect, { count: "exact" })
     .eq("board_id", board.id)
     .eq("is_notice", false)
+    .eq("is_hidden", false)
     .order("created_at", { ascending: false })
     .range(from, to);
 
@@ -555,13 +592,14 @@ export async function getPostById(id: string) {
   const supabase = await createSupabaseServer();
 
   if (!supabase) {
-    return mockPosts.find((post) => post.id === id) ?? null;
+    return mockPosts.find((post) => post.id === id && !post.is_hidden) ?? null;
   }
 
   const { data, error } = await supabase
     .from("posts")
     .select(postDetailSelect)
     .eq("id", id)
+    .eq("is_hidden", false)
     .maybeSingle();
 
   if (error || !data) {
@@ -637,6 +675,8 @@ export async function createPost({
     content: content.trim(),
     is_notice: isNotice,
     is_anonymous: isAnonymous,
+    is_hidden: false,
+    hidden_reason: null,
     up_count: 0,
     down_count: 0,
     view_count: 0,

@@ -6,6 +6,10 @@ const authors: Record<string, UserProfile> = {
     id: "user-demo",
     nickname: "orbit",
     role: "admin",
+    level: 4,
+    warning_count: 0,
+    is_suspended: false,
+    suspended_until: null,
     avatar_url: null,
     created_at: "2026-03-09T09:00:00.000Z",
     updated_at: null,
@@ -14,6 +18,10 @@ const authors: Record<string, UserProfile> = {
     id: "user-luma",
     nickname: "luma",
     role: "user",
+    level: 2,
+    warning_count: 0,
+    is_suspended: false,
+    suspended_until: null,
     avatar_url: null,
     created_at: "2026-03-09T10:00:00.000Z",
     updated_at: null,
@@ -26,6 +34,8 @@ type SupabaseCommentRow = {
   author_id: string;
   body: string;
   is_deleted: boolean;
+  is_hidden: boolean;
+  hidden_reason: string | null;
   upvotes: number | null;
   downvotes: number | null;
   created_at: string;
@@ -35,6 +45,10 @@ type SupabaseCommentRow = {
         id: string;
         nickname: string;
         role: "user" | "admin";
+        level: number;
+        warning_count: number;
+        is_suspended: boolean;
+        suspended_until: string | null;
         avatar_url: string | null;
         created_at: string;
         updated_at: string | null;
@@ -43,6 +57,10 @@ type SupabaseCommentRow = {
         id: string;
         nickname: string;
         role: "user" | "admin";
+        level: number;
+        warning_count: number;
+        is_suspended: boolean;
+        suspended_until: string | null;
         avatar_url: string | null;
         created_at: string;
         updated_at: string | null;
@@ -56,6 +74,8 @@ const commentSelect = `
   author_id,
   body,
   is_deleted,
+  is_hidden,
+  hidden_reason,
   upvotes,
   downvotes,
   created_at,
@@ -64,6 +84,10 @@ const commentSelect = `
     id,
     nickname,
     role,
+    level,
+    warning_count,
+    is_suspended,
+    suspended_until,
     avatar_url,
     created_at,
     updated_at
@@ -77,6 +101,8 @@ let mockComments: Comment[] = [
     author_id: "user-luma",
     body: "라우팅과 도메인 컴포넌트 분리가 먼저 잡혀 있으면 이후 작업 속도가 확실히 빨라집니다.",
     is_deleted: false,
+    is_hidden: false,
+    hidden_reason: null,
     upvotes: 4,
     downvotes: 0,
     created_at: "2026-03-09T12:30:00.000Z",
@@ -89,6 +115,8 @@ let mockComments: Comment[] = [
     author_id: "user-demo",
     body: "맞습니다. 특히 boards/posts/comments 계층을 미리 나누는 게 중요하죠.",
     is_deleted: false,
+    is_hidden: false,
+    hidden_reason: null,
     upvotes: 3,
     downvotes: 0,
     created_at: "2026-03-09T12:45:00.000Z",
@@ -101,6 +129,8 @@ let mockComments: Comment[] = [
     author_id: "user-demo",
     body: "env가 비어 있는 상태도 안전하게 처리해야 초기 세팅 피로도가 줄어듭니다.",
     is_deleted: false,
+    is_hidden: false,
+    hidden_reason: null,
     upvotes: 6,
     downvotes: 1,
     created_at: "2026-03-09T13:40:00.000Z",
@@ -126,6 +156,8 @@ function toComment(row: SupabaseCommentRow): Comment {
     author_id: row.author_id,
     body: row.body,
     is_deleted: row.is_deleted,
+    is_hidden: row.is_hidden,
+    hidden_reason: row.hidden_reason,
     upvotes: row.upvotes ?? 0,
     downvotes: row.downvotes ?? 0,
     created_at: row.created_at,
@@ -135,6 +167,10 @@ function toComment(row: SupabaseCommentRow): Comment {
           id: author.id,
           nickname: author.nickname,
           role: author.role,
+          level: author.level,
+          warning_count: author.warning_count,
+          is_suspended: author.is_suspended,
+          suspended_until: author.suspended_until,
           avatar_url: author.avatar_url,
           created_at: author.created_at,
           updated_at: author.updated_at,
@@ -202,6 +238,8 @@ export async function createComment({
       author_id: authorId,
       body: body.trim(),
       is_deleted: false,
+      is_hidden: false,
+      hidden_reason: null,
     };
 
     const { data, error } = await supabase
@@ -223,6 +261,8 @@ export async function createComment({
     author_id: "user-demo",
     body: body.trim(),
     is_deleted: false,
+    is_hidden: false,
+    hidden_reason: null,
     upvotes: 0,
     downvotes: 0,
     created_at: new Date().toISOString(),

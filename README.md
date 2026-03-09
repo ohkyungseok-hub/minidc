@@ -83,7 +83,48 @@ npm run lint
 npm run build
 ```
 
-## 6. 초보자용 폴더 구조
+## 6. 배포 방법
+
+가장 쉬운 배포 대상은 Vercel입니다. 현재 저장소는 Next.js App Router 구조라서 별도 서버 설정 없이 바로 올릴 수 있습니다.
+
+### 6-1. Vercel 배포 순서
+
+1. GitHub 저장소를 Vercel에 Import 합니다.
+2. Framework Preset은 `Next.js` 그대로 둡니다.
+3. Environment Variables에 아래 값을 넣습니다.
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-publishable-or-anon-key
+NEXT_PUBLIC_SITE_URL=https://your-production-domain
+```
+
+4. Deploy를 실행합니다.
+
+### 6-2. Supabase Auth 설정
+
+Supabase Dashboard에서 아래 값을 같이 맞춰야 회원가입/로그인이 배포 도메인에서 정상 동작합니다.
+
+- `Authentication -> URL Configuration -> Site URL`
+  - `https://your-production-domain`
+- `Authentication -> URL Configuration -> Redirect URLs`
+  - `http://localhost:3000/auth/callback`
+  - `https://your-production-domain/auth/callback`
+  - 프리뷰 배포도 쓸 경우 `https://*-your-team.vercel.app/auth/callback`
+
+### 6-3. 현재 프로젝트의 배포 안전장치
+
+이 저장소는 인증 리다이렉트 URL을 아래 우선순위로 계산합니다.
+
+1. `NEXT_PUBLIC_SITE_URL`
+2. `NEXT_PUBLIC_VERCEL_URL`
+3. `VERCEL_PROJECT_PRODUCTION_URL`
+4. `VERCEL_URL`
+5. `http://localhost:3000`
+
+그래도 운영 환경에서는 `NEXT_PUBLIC_SITE_URL`을 명시적으로 넣는 것을 권장합니다.
+
+## 7. 초보자용 폴더 구조
 
 ```text
 blackpearls/
@@ -149,7 +190,7 @@ blackpearls/
 └─ tsconfig.json
 ```
 
-## 7. 왜 이렇게 나누는가
+## 8. 왜 이렇게 나누는가
 
 초보자는 보통 “페이지 파일에 모든 걸 다 넣는 구조”에서 금방 꼬입니다. 그래서 기능별 역할을 분리해 두는 편이 유지보수에 훨씬 좋습니다.
 
@@ -166,7 +207,7 @@ blackpearls/
 
 이렇게 찾으면 됩니다.
 
-## 8. 필수 기능을 어디에 구현하면 되는가
+## 9. 필수 기능을 어디에 구현하면 되는가
 
 - 회원가입 / 로그인: `app/(auth)` + `lib/auth.ts` + `lib/supabase/*`
 - 게시판 목록: `app/boards/page.tsx` + `components/boards/*`
@@ -176,7 +217,7 @@ blackpearls/
 - 공지글: `posts.is_notice` + `components/posts/NoticeList.tsx`
 - 인기글: `app/hot/page.tsx` + `lib/posts.ts`
 
-## 9. Supabase로 실제 연결할 때 순서
+## 10. Supabase로 실제 연결할 때 순서
 
 1. Supabase 프로젝트 생성
 2. `.env.local`에 URL, Anon Key 입력
@@ -185,7 +226,7 @@ blackpearls/
 5. 로그인/회원가입을 `supabase.auth`로 연결
 6. Row Level Security 정책 추가
 
-## 10. 지금 바로 확인할 수 있는 것
+## 11. 지금 바로 확인할 수 있는 것
 
 - 게시판 목록 화면
 - 게시글 목록 / 상세 / 수정 화면
@@ -194,7 +235,7 @@ blackpearls/
 - 추천/비추천 API 구조
 - 공지글 / 인기글 분리 구조
 
-## 11. 다음 단계 추천
+## 12. 다음 단계 추천
 
 가장 먼저 할 일은 두 가지입니다.
 

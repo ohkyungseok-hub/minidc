@@ -21,6 +21,10 @@ function buildFallbackProfile(authUser: {
     id: authUser.id,
     nickname,
     role: "user",
+    level: 1,
+    warning_count: 0,
+    is_suspended: false,
+    suspended_until: null,
     avatar_url: null,
     created_at: authUser.created_at ?? new Date().toISOString(),
     updated_at: authUser.created_at ?? null,
@@ -44,7 +48,7 @@ export const getSessionUser = cache(async () => {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("id, nickname, role, avatar_url, created_at, updated_at")
+    .select("id, nickname, role, level, warning_count, is_suspended, suspended_until, avatar_url, created_at, updated_at")
     .eq("id", authUser.id)
     .maybeSingle();
 
@@ -66,6 +70,16 @@ export async function requireUser(redirectTo = "/login") {
 
   if (!user) {
     redirect(redirectTo);
+  }
+
+  return user;
+}
+
+export async function requireAdminUser(redirectTo = "/login") {
+  const user = await requireUser(redirectTo);
+
+  if (!isAdminUser(user)) {
+    redirect("/");
   }
 
   return user;

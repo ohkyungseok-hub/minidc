@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 
+import { getSiteUrl } from "@/lib/site-url";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
 function normalizeNextPath(value: FormDataEntryValue | null) {
@@ -78,7 +79,7 @@ export async function signUp(formData: FormData) {
     });
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const siteUrl = getSiteUrl();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
