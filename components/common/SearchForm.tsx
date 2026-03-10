@@ -15,7 +15,7 @@ export default function SearchForm({
 }: SearchFormProps) {
   return (
     <form action={action} className={className}>
-      <div className="flex w-full items-center overflow-hidden rounded-md border border-[#bcc7da] bg-white">
+      <div className="flex w-full items-center overflow-hidden rounded-md border border-[var(--line)] bg-white">
         <input
           type="search"
           name="q"
@@ -25,7 +25,7 @@ export default function SearchForm({
         />
         <button
           type="submit"
-          className="h-10 shrink-0 border-l border-[#bcc7da] bg-[#2f5ea9] px-4 text-sm font-semibold text-white transition hover:bg-[#244a85]"
+          className="h-10 shrink-0 border-l border-[var(--line)] bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
         >
           {submitLabel}
         </button>

@@ -25,7 +25,7 @@ export default function CommentForm({
         </p>
         <Link
           href={`/login?next=${encodeURIComponent(`/posts/${postId}`)}`}
-          className="mt-4 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
+          className="mt-4 inline-flex rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-[var(--primary-ink)]"
         >
           로그인하고 댓글 쓰기
         </Link>
@@ -51,13 +51,13 @@ export default function CommentForm({
           name="body"
           rows={5}
           placeholder="댓글을 입력하세요"
-          className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+          className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
         />
         <div className="flex justify-end">
           <FormStatusButton
             label="댓글 등록"
             pendingLabel="등록 중..."
-            className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-[var(--primary-ink)] disabled:cursor-not-allowed disabled:opacity-60"
           />
         </div>
       </form>

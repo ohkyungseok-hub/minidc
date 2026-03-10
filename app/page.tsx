@@ -19,8 +19,8 @@ export default async function HomePage() {
   return (
     <div className="space-y-8">
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="rounded-md border border-[#d5dce7] bg-white">
-          <div className="border-b border-[#dfe5ef] bg-[#f8fafc] px-5 py-3 text-sm font-bold text-[#244a85]">
+        <div className="rounded-md border border-[var(--line)] bg-white">
+          <div className="border-b border-[var(--line)] bg-[var(--surface-strong)] px-5 py-3 text-sm font-bold text-[var(--primary-ink)]">
             bless you
           </div>
           <div className="space-y-4 px-5 py-5">
@@ -34,13 +34,13 @@ export default async function HomePage() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href="/boards"
-                className="inline-flex h-10 items-center justify-center rounded-md bg-[#2f5ea9] px-4 text-sm font-semibold text-white transition hover:bg-[#244a85]"
+                className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
               >
                 고백하러 가기
               </Link>
               <Link
                 href="/posts/new"
-                className="inline-flex h-10 items-center justify-center rounded-md border border-[#c8d1df] bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-[#9eacc3] hover:text-slate-900"
+                className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--accent)] bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-[var(--accent-soft)] hover:text-slate-900"
               >
                 익명 글 작성
               </Link>
@@ -48,15 +48,15 @@ export default async function HomePage() {
           </div>
         </div>
         <div className="grid gap-3">
-          <div className="rounded-md border border-[#d5dce7] bg-white p-4">
+          <div className="rounded-md border border-[var(--line)] bg-white p-4">
             <p className="text-xs font-bold tracking-[0.18em] text-slate-500">게시판 수</p>
             <p className="mt-2 text-3xl font-black text-slate-950">{boards.length}</p>
           </div>
-          <div className="rounded-md border border-[#d5dce7] bg-white p-4">
+          <div className="rounded-md border border-[var(--line)] bg-white p-4">
             <p className="text-xs font-bold tracking-[0.18em] text-slate-500">최근 3일 인기글</p>
             <p className="mt-2 text-3xl font-black text-slate-950">{popularPosts.length}</p>
           </div>
-          <div className="rounded-md border border-[#d5dce7] bg-white p-4 text-sm leading-6 text-slate-600">
+          <div className="rounded-md border border-[var(--line)] bg-[var(--sub-soft)] p-4 text-sm leading-6 text-slate-600">
             고해성사, 위로, 해결책 세 게시판을 중심으로 익명 고백과 공감, 조언이 모이는 구조입니다.
           </div>
         </div>
@@ -68,7 +68,7 @@ export default async function HomePage() {
             <Link
               key={board.id}
               href={`/boards/${board.slug}`}
-              className="rounded-md border border-[#c8d1df] bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#9eacc3] hover:bg-[#f8fbff] hover:text-slate-950"
+              className="rounded-md border border-[var(--line)] bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[var(--primary)] hover:bg-[var(--primary-soft)] hover:text-slate-950"
             >
               {board.name}
             </Link>
@@ -93,7 +93,7 @@ export default async function HomePage() {
           action={(
             <Link
               href="/hot"
-              className="text-sm font-semibold text-amber-700 transition hover:text-amber-800"
+              className="text-sm font-semibold text-[var(--primary-ink)] transition hover:text-slate-900"
             >
               전체 보기
             </Link>

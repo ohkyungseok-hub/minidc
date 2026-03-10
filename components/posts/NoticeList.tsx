@@ -12,15 +12,15 @@ export default function NoticeList({ posts }: NoticeListProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-md border border-[#d5dce7] bg-white">
+    <div className="overflow-hidden rounded-md border border-[var(--line)] bg-white">
       {posts.map((post) => (
         <Link
           key={post.id}
           href={`/posts/${post.id}`}
-          className="flex flex-wrap items-center justify-between gap-3 border-b border-[#eef2f7] px-4 py-3 transition last:border-b-0 hover:bg-[#f8fbff] md:px-5"
+          className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--line)] px-4 py-3 transition last:border-b-0 hover:bg-[var(--sub-soft)] md:px-5"
         >
           <div className="flex min-w-0 items-center gap-3">
-            <span className="rounded-sm border border-[#f0c674] bg-[#fff2c8] px-2 py-1 text-[11px] font-bold text-[#9a6700]">
+            <span className="rounded-sm border border-[var(--sub-strong)] bg-[var(--sub)] px-2 py-1 text-[11px] font-bold text-[var(--primary-ink)]">
               공지
             </span>
             <span className="truncate text-sm font-semibold text-slate-900">

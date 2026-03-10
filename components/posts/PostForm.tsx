@@ -29,7 +29,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+      className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-[var(--primary-ink)] disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "저장 중..." : label}
     </button>
@@ -66,7 +66,7 @@ export default function PostForm({
                 boardId: event.target.value,
               }))
             }
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
           >
             <option value="">게시판을 선택하세요</option>
             {boards.map((board) => (
@@ -88,7 +88,7 @@ export default function PostForm({
               }))
             }
             placeholder="지금 꺼내고 싶은 이야기를 한 줄로 적어보세요"
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
           />
         </label>
         <label className="block space-y-2">
@@ -104,7 +104,7 @@ export default function PostForm({
             }
             rows={12}
             placeholder="누구에게도 말 못했던 일, 위로받고 싶은 마음, 해결이 필요한 고민을 편하게 적어보세요"
-            className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+            className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
           />
         </label>
         <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -124,7 +124,7 @@ export default function PostForm({
           </span>
         </label>
         {canManageNotice ? (
-          <label className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+          <label className="flex items-center gap-3 rounded-2xl border border-[var(--sub-strong)] bg-[var(--sub-soft)] px-4 py-3">
             <input
               name="isNotice"
               type="checkbox"
@@ -136,7 +136,7 @@ export default function PostForm({
                 }))
               }
             />
-            <span className="text-sm font-semibold text-amber-900">
+            <span className="text-sm font-semibold text-[var(--primary-ink)]">
               공지글로 등록
             </span>
           </label>
@@ -155,8 +155,8 @@ export default function PostForm({
         </div>
       </form>
 
-      <aside className="rounded-[2rem] border border-black/10 bg-slate-950 p-6 text-white shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">
+      <aside className="rounded-[2rem] border border-[var(--accent)] bg-[linear-gradient(180deg,var(--primary-ink),#445a72)] p-6 text-white shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--sub)]">
           bless you
         </p>
         <h3 className="mt-4 text-2xl font-bold tracking-tight">
@@ -166,12 +166,12 @@ export default function PostForm({
           {deferredContent || "지금 적는 이야기가 이 영역에 미리 보입니다."}
         </p>
         {values.isAnonymous ? (
-          <div className="mt-4 inline-flex rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-950">
+          <div className="mt-4 inline-flex rounded-full bg-[var(--sub)] px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-[var(--primary-ink)]">
             Anonymous
           </div>
         ) : null}
         {values.isNotice ? (
-          <div className="mt-3 inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-amber-700">
+          <div className="mt-3 inline-flex rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-[var(--accent-strong)]">
             Notice
           </div>
         ) : null}

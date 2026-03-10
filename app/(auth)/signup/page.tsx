@@ -50,7 +50,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               type="text"
               required
               placeholder="blackpearls-user"
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
             />
           </label>
           <label className="block space-y-2">
@@ -60,7 +60,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               type="email"
               required
               placeholder="you@example.com"
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
             />
           </label>
           <label className="block space-y-2">
@@ -70,12 +70,12 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               type="password"
               required
               placeholder="8자 이상"
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
             />
           </label>
           <button
             type="submit"
-            className="w-full rounded-2xl bg-slate-950 px-4 py-3 font-semibold text-white"
+            className="w-full rounded-2xl bg-[var(--primary)] px-4 py-3 font-semibold text-[var(--primary-ink)]"
           >
             회원가입
           </button>
@@ -84,7 +84,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
           이미 계정이 있으면{" "}
           <Link
             href={`/login${next !== "/" ? `?next=${encodeURIComponent(next)}` : ""}`}
-            className="font-semibold text-amber-700"
+            className="font-semibold text-[var(--primary-ink)]"
           >
             로그인
           </Link>

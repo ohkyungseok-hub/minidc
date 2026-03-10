@@ -14,7 +14,7 @@ export default function Nav() {
 
   return (
     <nav className="overflow-x-auto">
-      <div className="flex min-w-max items-center gap-1">
+      <div className="flex min-w-max items-center gap-1 pb-0.5">
       {items.map((item) => {
         const active =
           item.href === "/" ? pathname === item.href : pathname.startsWith(item.href);
@@ -23,10 +23,10 @@ export default function Nav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`rounded-t-md border border-b-0 px-4 py-2 text-sm font-semibold transition ${
+            className={`rounded-t-lg border px-4 py-2.5 text-sm font-semibold transition ${
               active
-                ? "border-[#a9b9d5] bg-[#f7faff] text-[#244a85]"
-                : "border-transparent text-slate-600 hover:bg-white hover:text-slate-900"
+                ? "border-[var(--primary-strong)] bg-[var(--primary)] text-[var(--primary-ink)] shadow-[inset_0_-2px_0_rgba(53,81,107,0.08)]"
+                : "border-transparent bg-transparent text-slate-600 hover:border-[var(--primary)] hover:bg-[var(--primary-soft)] hover:text-[var(--primary-ink)]"
             }`}
           >
             {item.label}

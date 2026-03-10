@@ -9,14 +9,14 @@ type BoardTabsProps = {
 
 export default function BoardTabs({ boards, currentSlug }: BoardTabsProps) {
   return (
-    <div className="overflow-hidden rounded-md border border-[#d5dce7] bg-white">
-      <div className="flex min-w-max items-center overflow-x-auto px-2">
+    <div className="overflow-hidden rounded-md border border-[var(--line)] bg-white">
+      <div className="flex min-w-max items-center overflow-x-auto gap-1 px-2 py-1.5">
         <Link
           href="/boards"
-          className={`border-b-2 px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
+          className={`rounded-lg border px-4 py-2.5 text-sm font-semibold whitespace-nowrap transition ${
             currentSlug
-              ? "border-transparent text-slate-600 hover:text-slate-900"
-              : "border-[#2f5ea9] text-[#244a85]"
+              ? "border-transparent bg-transparent text-slate-600 hover:border-[var(--primary)] hover:bg-[var(--primary-soft)] hover:text-[var(--primary-ink)]"
+              : "border-[var(--primary-strong)] bg-[var(--primary)] text-[var(--primary-ink)]"
           }`}
         >
           전체
@@ -28,10 +28,10 @@ export default function BoardTabs({ boards, currentSlug }: BoardTabsProps) {
             <Link
               key={board.id}
               href={`/boards/${board.slug}`}
-              className={`border-b-2 px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
-                active
-                  ? "border-[#2f5ea9] bg-[#f7faff] text-[#244a85]"
-                  : "border-transparent text-slate-600 hover:text-slate-900"
+              className={`rounded-lg border px-4 py-2.5 text-sm font-semibold whitespace-nowrap transition ${
+              active
+                  ? "border-[var(--primary-strong)] bg-[var(--primary)] text-[var(--primary-ink)]"
+                  : "border-transparent bg-transparent text-slate-600 hover:border-[var(--primary)] hover:bg-[var(--primary-soft)] hover:text-[var(--primary-ink)]"
               }`}
             >
               {board.name}

@@ -462,11 +462,47 @@ let mockPosts: Post[] = [
 ];
 
 export async function getFeaturedPosts() {
-  return mockPosts.filter((post) => !post.is_notice && !post.is_hidden).slice(0, 3);
+  const supabase = await createSupabaseServer();
+
+  if (!supabase) {
+    return mockPosts.filter((post) => !post.is_notice && !post.is_hidden).slice(0, 3);
+  }
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select(postDetailSelect)
+    .eq("is_notice", false)
+    .eq("is_hidden", false)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  if (error || !data) {
+    return [];
+  }
+
+  return (data as SupabasePostDetailRow[]).map(toPost);
 }
 
 export async function getNoticePosts() {
-  return mockPosts.filter((post) => post.is_notice && !post.is_hidden).slice(0, 5);
+  const supabase = await createSupabaseServer();
+
+  if (!supabase) {
+    return mockPosts.filter((post) => post.is_notice && !post.is_hidden).slice(0, 5);
+  }
+
+  const { data, error } = await supabase
+    .from("posts")
+    .select(postDetailSelect)
+    .eq("is_notice", true)
+    .eq("is_hidden", false)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  if (error || !data) {
+    return [];
+  }
+
+  return (data as SupabasePostDetailRow[]).map(toPost);
 }
 
 export async function getPopularPosts(options: PopularPostsOptions = {}) {

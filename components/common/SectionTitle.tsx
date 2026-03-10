@@ -14,10 +14,10 @@ export default function SectionTitle({
   action,
 }: SectionTitleProps) {
   return (
-    <div className="flex flex-col gap-4 border-b border-[#d6dce8] pb-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="flex flex-col gap-4 border-b border-[var(--line)] pb-3 sm:flex-row sm:items-end sm:justify-between">
       <div className="space-y-1.5">
         {eyebrow ? (
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#2f5ea9]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--primary-ink)]">
             {eyebrow}
           </p>
         ) : null}

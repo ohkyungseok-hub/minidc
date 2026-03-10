@@ -15,7 +15,7 @@ export const mockBoards: Board[] = [
     slug: "confession",
     name: "고해성사",
     description: "누구에게도 말 못할 일을 고백해보세요. 조금이나마 마음이 편안해질거예요",
-    accent: "#7c3aed",
+    accent: "#DCC6FF",
     created_at: "2026-03-09T09:00:00.000Z",
   },
   {
@@ -23,7 +23,7 @@ export const mockBoards: Board[] = [
     slug: "comfort",
     name: "위로받고 싶어요",
     description: "삶이 힘든신가요? 위로받고 싶은 일이 있다면 알려주세요. 저희가 함께 응원해드릴게요.",
-    accent: "#2563eb",
+    accent: "#A7C7E7",
     created_at: "2026-03-09T09:10:00.000Z",
   },
   {
@@ -31,12 +31,12 @@ export const mockBoards: Board[] = [
     slug: "solutions",
     name: "해결책을 제시해주세요",
     description: "지피티가 해결하지 못한 삶의 지혜가 필요하신가요? 집단지성으로 당신을 도와드릴게요",
-    accent: "#0f766e",
+    accent: "#E9DCC9",
     created_at: "2026-03-09T09:20:00.000Z",
   },
 ];
 
-const boardAccentPalette = ["#7c3aed", "#2563eb", "#0f766e", "#be123c", "#0369a1"];
+const boardAccentPalette = ["#DCC6FF", "#A7C7E7", "#E9DCC9", "#DCC6FF", "#A7C7E7"];
 
 function attachBoardAccent(board: Omit<Board, "accent">, index = 0): Board {
   const fallback = mockBoards.find((item) => item.slug === board.slug)?.accent;

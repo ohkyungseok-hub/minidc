@@ -25,8 +25,8 @@ export default function AdminSidebar() {
             href={item.href}
             className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
               isActive
-                ? "border-[#2f5ea9] bg-[#eef4ff] text-[#244a85]"
-                : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-950"
+                ? "border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary-ink)]"
+                : "border-slate-200 bg-white text-slate-700 hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-slate-950"
             }`}
           >
             <span>{item.label}</span>

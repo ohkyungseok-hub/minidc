@@ -10,47 +10,47 @@ export default async function Header() {
   const user = await getSessionUser();
 
   return (
-    <header className="sticky top-0 z-30 -mx-3 border-b border-[#ccd5e3] bg-white/95 shadow-[0_1px_0_rgba(15,23,42,0.03)] backdrop-blur sm:-mx-5 lg:-mx-6">
-      <div className="border-t-4 border-[#2f5ea9] px-3 py-3 sm:px-5 lg:px-6">
+    <header className="sticky top-0 z-30 -mx-3 border-b border-[var(--line)] bg-[rgba(255,255,255,0.92)] shadow-[0_1px_0_rgba(53,81,107,0.06)] backdrop-blur sm:-mx-5 lg:-mx-6">
+      <div className="border-t-4 border-[var(--primary)] px-3 py-3 sm:px-5 lg:px-6">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex items-center justify-between gap-4">
               <Link href="/" className="flex items-center gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-md border border-[#244a85] bg-[#2f5ea9] text-sm font-black uppercase tracking-[0.18em] text-white">
-                  dc
+                <span className="grid h-10 w-10 place-items-center rounded-md border border-[var(--primary-strong)] bg-[var(--primary)] text-sm font-black uppercase tracking-[0.18em] text-[var(--primary-ink)]">
+                  BP
                 </span>
                 <div>
                   <p className="text-xl font-black tracking-tight text-slate-950">
                     BLACKPEARLS
                   </p>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2f5ea9]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--primary-ink)]">
                     bless you
                   </p>
                 </div>
               </Link>
               {user ? (
                 <div className="flex items-center gap-2 xl:hidden">
-                  <div className="rounded-md border border-[#d7e1f0] bg-[#f3f7ff] px-2.5 py-2 text-xs font-semibold text-[#244a85]">
+                  <div className="rounded-md border border-[var(--primary)] bg-[var(--primary-soft)] px-2.5 py-2 text-xs font-semibold text-[var(--primary-ink)]">
                     {user.nickname}
                   </div>
                   {user.role === "admin" ? (
                     <Link
                       href="/admin"
-                      className="rounded-md border border-[#c8d7f0] bg-white px-3 py-2 text-xs font-semibold text-[#244a85]"
+                      className="rounded-md border border-[var(--accent)] bg-white px-3 py-2 text-xs font-semibold text-[var(--primary-ink)]"
                     >
                       관리자
                     </Link>
                   ) : null}
                   <Link
                     href="/posts/new"
-                    className="rounded-md bg-[#2f5ea9] px-3 py-2 text-xs font-semibold text-white"
+                    className="rounded-md bg-[var(--primary)] px-3 py-2 text-xs font-semibold text-[var(--primary-ink)]"
                   >
                     글쓰기
                   </Link>
                   <form action={signOut}>
                     <button
                       type="submit"
-                      className="rounded-md border border-[#c8d1df] bg-white px-3 py-2 text-xs font-semibold text-slate-700"
+                      className="rounded-md border border-[var(--line)] bg-white px-3 py-2 text-xs font-semibold text-slate-700"
                     >
                       로그아웃
                     </button>
@@ -66,7 +66,7 @@ export default async function Header() {
                   </Link>
                   <Link
                     href="/signup"
-                    className="rounded-md bg-[#2f5ea9] px-3 py-2 text-xs font-semibold text-white"
+                    className="rounded-md bg-[var(--primary)] px-3 py-2 text-xs font-semibold text-[var(--primary-ink)]"
                   >
                     회원가입
                   </Link>
@@ -82,28 +82,28 @@ export default async function Header() {
               />
               {user ? (
                 <div className="hidden items-center gap-2 xl:flex">
-                  <div className="rounded-md border border-[#d7e1f0] bg-[#f3f7ff] px-3 py-2 text-sm font-semibold text-[#244a85]">
+                  <div className="rounded-md border border-[var(--primary)] bg-[var(--primary-soft)] px-3 py-2 text-sm font-semibold text-[var(--primary-ink)]">
                     {user.nickname}
                     {user.role === "admin" ? " · 관리자" : ""}
                   </div>
                   {user.role === "admin" ? (
                     <Link
                       href="/admin"
-                      className="rounded-md border border-[#c8d7f0] bg-white px-4 py-2 text-sm font-semibold text-[#244a85] transition hover:border-[#2f5ea9] hover:text-[#2f5ea9]"
+                      className="rounded-md border border-[var(--accent)] bg-white px-4 py-2 text-sm font-semibold text-[var(--primary-ink)] transition hover:border-[var(--accent-strong)] hover:bg-[var(--accent-soft)]"
                     >
                       관리자
                     </Link>
                   ) : null}
                   <Link
                     href="/posts/new"
-                    className="rounded-md bg-[#2f5ea9] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#244a85]"
+                    className="rounded-md bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
                   >
                     글쓰기
                   </Link>
                   <form action={signOut}>
                     <button
                       type="submit"
-                      className="rounded-md border border-[#c8d1df] bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#9eacc3] hover:text-slate-900"
+                      className="rounded-md border border-[var(--line)] bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[var(--sub-strong)] hover:bg-[var(--sub-soft)] hover:text-slate-900"
                     >
                       로그아웃
                     </button>
@@ -119,7 +119,7 @@ export default async function Header() {
                   </Link>
                   <Link
                     href="/signup"
-                    className="rounded-md bg-[#2f5ea9] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#244a85]"
+                    className="rounded-md bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
                   >
                     회원가입
                   </Link>
@@ -128,7 +128,7 @@ export default async function Header() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-md border border-[#d5dce7] bg-[#f8fafc] px-2 pt-2">
+          <div className="overflow-hidden rounded-md border border-[var(--line)] bg-[var(--surface-strong)] px-2 pt-2">
             <Nav />
           </div>
         </div>

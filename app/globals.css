@@ -1,14 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --page-bg: #f3f5f8;
+  --page-bg: #f5f7fb;
   --surface: #ffffff;
-  --surface-strong: #f8fafc;
-  --ink: #1f2937;
-  --muted: #6b7280;
-  --line: #d6dce8;
-  --brand: #2f5ea9;
-  --brand-soft: #e8effb;
+  --surface-strong: #fbfaf7;
+  --ink: #2d3a4a;
+  --muted: #6d7785;
+  --line: #d7ddea;
+  --primary: #a7c7e7;
+  --primary-strong: #8cb3d9;
+  --primary-soft: #eef5fc;
+  --primary-ink: #35516b;
+  --sub: #e9dcc9;
+  --sub-strong: #dbc6aa;
+  --sub-soft: #f7f1e8;
+  --accent: #dcc6ff;
+  --accent-strong: #bba0ea;
+  --accent-soft: #f3ecff;
 }
 
 @theme inline {
@@ -28,9 +36,11 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, #f9fbfd 0, #f3f5f8 120px),
-    linear-gradient(90deg, rgba(214, 220, 232, 0.22) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(214, 220, 232, 0.18) 1px, transparent 1px);
+    radial-gradient(circle at top left, rgba(167, 199, 231, 0.26), transparent 36%),
+    radial-gradient(circle at top right, rgba(220, 198, 255, 0.18), transparent 28%),
+    linear-gradient(180deg, #fcfbf8 0, #f5f7fb 120px),
+    linear-gradient(90deg, rgba(167, 199, 231, 0.14) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(233, 220, 201, 0.16) 1px, transparent 1px);
   background-size: auto, 24px 24px, 24px 24px;
   color: var(--ink);
   font-family:
@@ -56,9 +66,9 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: #94a3b8;
+  color: #98a3b2;
 }
 
 ::selection {
-  background: rgba(47, 94, 169, 0.18);
+  background: rgba(220, 198, 255, 0.42);
 }

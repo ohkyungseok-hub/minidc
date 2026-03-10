@@ -82,8 +82,8 @@ export default function VoteButtons({
           onClick={() => handleVote(1)}
           className={`rounded-full border px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
             currentVote === 1
-              ? "border-emerald-600 bg-emerald-50 text-emerald-700"
-              : "border-slate-200 bg-white text-slate-700 hover:border-emerald-500 hover:text-emerald-600"
+              ? "border-[var(--primary-strong)] bg-[var(--primary-soft)] text-[var(--primary-ink)]"
+              : "border-slate-200 bg-white text-slate-700 hover:border-[var(--primary)] hover:text-[var(--primary-ink)]"
           }`}
         >
           추천 {upCount}
@@ -97,8 +97,8 @@ export default function VoteButtons({
           onClick={() => handleVote(-1)}
           className={`rounded-full border px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
             currentVote === -1
-              ? "border-rose-600 bg-rose-50 text-rose-700"
-              : "border-slate-200 bg-white text-slate-700 hover:border-rose-500 hover:text-rose-600"
+              ? "border-[var(--accent-strong)] bg-[var(--accent-soft)] text-[var(--accent-strong)]"
+              : "border-slate-200 bg-white text-slate-700 hover:border-[var(--accent)] hover:text-[var(--accent-strong)]"
           }`}
         >
           비추천 {downCount}
@@ -108,7 +108,7 @@ export default function VoteButtons({
         <div className="space-y-2">
           <p className="text-xs text-rose-600">{message}</p>
           {!isAuthenticated ? (
-            <Link href={loginHref} className="text-xs font-semibold text-amber-700 underline underline-offset-2">
+            <Link href={loginHref} className="text-xs font-semibold text-[var(--primary-ink)] underline underline-offset-2">
               로그인하러 가기
             </Link>
           ) : null}

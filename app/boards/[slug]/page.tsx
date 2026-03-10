@@ -55,7 +55,7 @@ export default async function BoardDetailPage({
             />
             <Link
               href={`/posts/new?boardId=${board.id}`}
-              className="inline-flex h-10 items-center justify-center rounded-md bg-[#2f5ea9] px-4 text-sm font-semibold text-white transition hover:bg-[#244a85]"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
             >
               글쓰기
             </Link>
@@ -65,7 +65,7 @@ export default async function BoardDetailPage({
       {feed.notices.length ? (
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold tracking-[0.14em] text-[#2f5ea9]">
+            <h3 className="text-sm font-bold tracking-[0.14em] text-[var(--primary-ink)]">
               공지글
             </h3>
             <p className="text-sm text-slate-500">{feed.notices.length}개</p>

@@ -22,14 +22,14 @@ export default function PostDetail({
     <article className="rounded-[2rem] border border-black/10 bg-white/90 p-8 shadow-sm">
       <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
         {post.board ? (
-          <Link href={`/boards/${post.board.slug}`} className="text-amber-700">
+          <Link href={`/boards/${post.board.slug}`} className="text-[var(--primary-ink)]">
             {post.board.name}
           </Link>
         ) : null}
         {post.is_notice ? (
           <>
             <span>•</span>
-            <span className="rounded-full bg-amber-100 px-2 py-1 tracking-[0.18em] text-amber-700">
+            <span className="rounded-full bg-[var(--sub)] px-2 py-1 tracking-[0.18em] text-[var(--primary-ink)]">
               공지
             </span>
           </>
@@ -58,7 +58,7 @@ export default function PostDetail({
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href={`/posts/${post.id}/edit`}
-              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
+              className="rounded-full border border-[var(--line)] px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-slate-950"
             >
               수정
             </Link>
