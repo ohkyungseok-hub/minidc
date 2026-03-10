@@ -646,6 +646,20 @@ export async function getPostById(id: string) {
 }
 
 export async function incrementViewCount(postId: string) {
+  const supabase = await createSupabaseServer();
+
+  if (supabase) {
+    const { data, error } = await (supabase as ReturnType<typeof supabase.rpc> extends never ? never : typeof supabase)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .rpc("increment_post_view_count" as any, { p_post_id: postId } as any);
+
+    if (error) {
+      throw new Error("Failed to increment view count");
+    }
+
+    return data as number;
+  }
+
   const post = mockPosts.find((item) => item.id === postId);
 
   if (!post) {
