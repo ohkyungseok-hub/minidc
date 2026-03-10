@@ -33,14 +33,8 @@ export default async function HomePage() {
             </p>
             <div className="flex flex-wrap gap-2">
               <Link
-                href="/boards"
-                className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
-              >
-                고백하러 가기
-              </Link>
-              <Link
                 href="/posts/new"
-                className="inline-flex h-10 items-center justify-center rounded-md border border-[var(--accent)] bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-[var(--accent-soft)] hover:text-slate-900"
+                className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--primary)] px-4 text-sm font-semibold text-[var(--primary-ink)] transition hover:bg-[var(--primary-strong)]"
               >
                 익명 글 작성
               </Link>
@@ -63,26 +57,21 @@ export default async function HomePage() {
       </section>
 
       <section className="space-y-4">
-        <div className="flex flex-wrap gap-3">
-          {boards.slice(0, 6).map((board) => (
-            <Link
-              key={board.id}
-              href={`/boards/${board.slug}`}
-              className="rounded-md border border-[var(--line)] bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-[var(--primary)] hover:bg-[var(--primary-soft)] hover:text-slate-950"
-            >
-              {board.name}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-4">
         <SectionTitle
           eyebrow="Notice"
           title="공지글"
           description="운영 공지와 이용 가이드는 상단에 고정되어 처음 온 사용자도 흐름을 이해할 수 있습니다."
         />
         <NoticeList posts={noticePosts} />
+      </section>
+
+      <section className="space-y-4">
+        <SectionTitle
+          eyebrow="Boards"
+          title="주요 게시판"
+          description="고백, 위로, 해결책 세 흐름으로 나누어 마음 상태에 맞는 공간을 찾을 수 있습니다."
+        />
+        <BoardList boards={boards} />
       </section>
 
       <section className="space-y-4">
@@ -103,15 +92,6 @@ export default async function HomePage() {
           posts={popularPosts}
           emptyMessage="최근 3일 내 집계할 인기글이 없습니다."
         />
-      </section>
-
-      <section className="space-y-4">
-        <SectionTitle
-          eyebrow="Boards"
-          title="주요 게시판"
-          description="고백, 위로, 해결책 세 흐름으로 나누어 마음 상태에 맞는 공간을 찾을 수 있습니다."
-        />
-        <BoardList boards={boards} />
       </section>
 
       <section className="space-y-4">

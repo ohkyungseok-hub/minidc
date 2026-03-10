@@ -49,13 +49,13 @@ export default function PostFeedTable({
           >
             <div className="grid gap-2 md:grid-cols-[90px_minmax(0,1fr)_130px_120px_90px_90px] md:items-center md:gap-4">
               <div className="text-sm font-semibold text-slate-500">
-                {post.is_notice ? (
-                  <span className="inline-flex rounded-sm border border-[var(--sub-strong)] bg-[var(--sub)] px-2 py-1 text-xs font-bold text-[var(--primary-ink)]">
-                    공지
+                {post.board?.name ? (
+                  <span className="inline-flex rounded-sm border border-[var(--line)] bg-[var(--surface-strong)] px-2 py-1 text-xs font-semibold text-slate-600">
+                    {post.board.name}
                   </span>
                 ) : (
-                  <span className="inline-flex rounded-sm border border-[var(--line)] bg-[var(--surface-strong)] px-2 py-1 text-xs font-semibold text-slate-500">
-                    일반
+                  <span className="inline-flex rounded-sm border border-[var(--line)] bg-[var(--surface-strong)] px-2 py-1 text-xs font-semibold text-slate-400">
+                    —
                   </span>
                 )}
               </div>
