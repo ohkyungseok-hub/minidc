@@ -14,6 +14,7 @@ function encodeMessage(message: string) {
 export async function createCommentAction(postId: string, formData: FormData) {
   const user = await requireUser(`/login?next=${encodeURIComponent(`/posts/${postId}`)}`);
   const body = String(formData.get("body") ?? "").trim();
+  const isAnonymous = formData.get("isAnonymous") === "on";
 
   if (!body) {
     redirect(`/posts/${postId}?commentError=${encodeMessage("댓글 내용을 입력하세요.")}#comments`);
@@ -29,6 +30,7 @@ export async function createCommentAction(postId: string, formData: FormData) {
     postId,
     body,
     authorId: user.id,
+    isAnonymous,
   });
 
   revalidatePath(`/posts/${postId}`);

@@ -36,6 +36,7 @@ type SupabaseCommentRow = {
   is_deleted: boolean;
   is_hidden: boolean;
   hidden_reason: string | null;
+  is_anonymous: boolean;
   upvotes: number | null;
   downvotes: number | null;
   created_at: string;
@@ -76,6 +77,7 @@ const commentSelect = `
   is_deleted,
   is_hidden,
   hidden_reason,
+  is_anonymous,
   upvotes,
   downvotes,
   created_at,
@@ -99,6 +101,7 @@ let mockComments: Comment[] = [
     id: "comment-1",
     post_id: "post-1",
     author_id: "user-luma",
+    is_anonymous: false,
     body: "이런 공간이 꼭 필요했습니다. 말하지 못한 마음을 내려놓는 것만으로도 조금 숨이 쉬어질 때가 있더라고요.",
     is_deleted: false,
     is_hidden: false,
@@ -113,6 +116,7 @@ let mockComments: Comment[] = [
     id: "comment-2",
     post_id: "post-1",
     author_id: "user-demo",
+    is_anonymous: false,
     body: "누군가의 고백을 가볍게 넘기지 않고 끝까지 읽어주는 분위기를 같이 만들었으면 합니다.",
     is_deleted: false,
     is_hidden: false,
@@ -127,6 +131,7 @@ let mockComments: Comment[] = [
     id: "comment-3",
     post_id: "post-2",
     author_id: "user-demo",
+    is_anonymous: false,
     body: "이유 없이 버거운 날이 계속되는 사람 정말 많아요. 버티고 있다는 것만으로도 이미 충분히 잘하고 있는 겁니다.",
     is_deleted: false,
     is_hidden: false,
@@ -158,6 +163,7 @@ function toComment(row: SupabaseCommentRow): Comment {
     is_deleted: row.is_deleted,
     is_hidden: row.is_hidden,
     hidden_reason: row.hidden_reason,
+    is_anonymous: row.is_anonymous,
     upvotes: row.upvotes ?? 0,
     downvotes: row.downvotes ?? 0,
     created_at: row.created_at,
@@ -225,10 +231,12 @@ export async function createComment({
   postId,
   body,
   authorId,
+  isAnonymous,
 }: {
   postId: string;
   body: string;
   authorId?: string;
+  isAnonymous?: boolean;
 }) {
   const supabase = await createSupabaseServer();
 
@@ -237,6 +245,7 @@ export async function createComment({
       post_id: postId,
       author_id: authorId,
       body: body.trim(),
+      is_anonymous: isAnonymous ?? false,
       is_deleted: false,
       is_hidden: false,
       hidden_reason: null,
@@ -260,6 +269,7 @@ export async function createComment({
     post_id: postId,
     author_id: "user-demo",
     body: body.trim(),
+    is_anonymous: isAnonymous ?? false,
     is_deleted: false,
     is_hidden: false,
     hidden_reason: null,

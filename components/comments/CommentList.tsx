@@ -45,7 +45,7 @@ export default function CommentList({
             }`}
           >
             <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-              <span>{comment.author?.nickname ?? "guest"}</span>
+              <span>{comment.is_anonymous ? "익명" : (comment.author?.nickname ?? "guest")}</span>
               <span>•</span>
               <span>{formatCommentDate(comment.created_at)}</span>
             </div>

@@ -3,14 +3,15 @@ import type { Metadata } from "next";
 export const SITE_NAME = "블랙펄즈";
 export const SITE_NAME_EN = "BLACKPEARLS";
 
-// TODO: .env.local에 NEXT_PUBLIC_SITE_URL=https://blackpearls.kr 추가 필요
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://blackpearls.kr";
 
 export const SITE_DESCRIPTION =
   "블랙펄즈는 남에게 말 못한 고민과 치부를 익명으로 털어놓고, 타인의 이야기에서 위로와 공감을 얻는 익명 커뮤니티입니다. 고백을 소비하지 않고 함께 견디며 때로는 해결책까지 모아가는 공간입니다.";
 
-export const OG_IMAGE = `${SITE_URL}/og-default.png`; // TODO: og-default.png 제작 필요
+// Next.js가 app/opengraph-image.tsx를 /opengraph-image로 자동 서빙하지만
+// 외부 OG 크롤러를 위해 정적 경로도 함께 지정
+export const OG_IMAGE = `${SITE_URL}/opengraph-image`;
 
 /** page-level metadata 생성 헬퍼 */
 export function buildMetadata({

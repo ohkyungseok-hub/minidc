@@ -81,6 +81,7 @@ type AdminCommentRow = {
   is_deleted: boolean;
   is_hidden: boolean;
   hidden_reason: string | null;
+  is_anonymous: boolean;
   upvotes: number | null;
   downvotes: number | null;
   created_at: string;
@@ -182,6 +183,7 @@ const adminCommentSelect = `
   is_deleted,
   is_hidden,
   hidden_reason,
+  is_anonymous,
   upvotes,
   downvotes,
   created_at,
@@ -302,6 +304,7 @@ function toAdminCommentItem(row: AdminCommentRow): AdminCommentListItem {
     is_deleted: row.is_deleted,
     is_hidden: row.is_hidden,
     hidden_reason: row.hidden_reason,
+    is_anonymous: row.is_anonymous,
     upvotes: row.upvotes ?? 0,
     downvotes: row.downvotes ?? 0,
     created_at: row.created_at,

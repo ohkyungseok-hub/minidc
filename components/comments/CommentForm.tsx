@@ -53,6 +53,10 @@ export default function CommentForm({
           placeholder="댓글을 입력하세요"
           className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
         />
+        <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <input name="isAnonymous" type="checkbox" />
+          <span className="text-sm font-semibold text-slate-700">익명으로 작성</span>
+        </label>
         <div className="flex justify-end">
           <FormStatusButton
             label="댓글 등록"

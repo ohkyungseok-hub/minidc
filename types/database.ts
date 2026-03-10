@@ -66,6 +66,7 @@ export type Database = {
         is_deleted: boolean;
         is_hidden: boolean;
         hidden_reason: string | null;
+        is_anonymous: boolean;
         upvotes: number;
         downvotes: number;
         created_at: string;
