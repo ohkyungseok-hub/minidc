@@ -92,6 +92,32 @@ begin
         now() - interval '6 hours'
       ),
       (
+        v_confession_id,
+        v_author_id,
+        '동생보다 잘되길 바라지 않았던 적이 있습니다',
+        '가족이라서 늘 응원해야 한다고 생각했는데, 어느 순간부터는 동생이 잘되면 제가 초라해질까 봐 두려워졌습니다. 겉으로는 축하했지만 속으로는 불편했던 제 마음이 너무 부끄럽습니다.',
+        false,
+        true,
+        18,
+        1,
+        172,
+        now() - interval '14 hours',
+        now() - interval '14 hours'
+      ),
+      (
+        v_confession_id,
+        v_author_id,
+        '부모님 전화를 일부러 계속 미뤘습니다',
+        '받으면 또 결혼 이야기와 비교 이야기가 나올 걸 알아서 벨이 울려도 일부러 안 받았습니다. 죄책감이 큰데도 잠깐이라도 편해지고 싶어서 계속 피하게 됩니다.',
+        false,
+        true,
+        13,
+        0,
+        128,
+        now() - interval '2 hours',
+        now() - interval '2 hours'
+      ),
+      (
         v_comfort_id,
         v_author_id,
         '오늘도 아무 일 없는 척 출근하고 왔어요',
@@ -144,6 +170,32 @@ begin
         now() - interval '4 hours'
       ),
       (
+        v_comfort_id,
+        v_author_id,
+        '주말이 오면 더 외로운 사람이 저뿐은 아니었으면 좋겠어요',
+        '평일엔 일 때문에 버티는데 주말이 되면 누구에게도 연락할 사람이 없다는 사실이 더 크게 느껴집니다. 쉬는 날이 반갑지 않고 오히려 두려워지는 마음을 어디에 말해야 할지 모르겠습니다.',
+        false,
+        true,
+        27,
+        0,
+        224,
+        now() - interval '13 hours',
+        now() - interval '13 hours'
+      ),
+      (
+        v_comfort_id,
+        v_author_id,
+        '퇴근 후 아무것도 못 하고 누워만 있는 날이 많습니다',
+        '해야 할 일은 머릿속에 많은데 몸이 전혀 따라주지 않습니다. 핸드폰만 보다가 자책하다 잠드는 패턴이 계속 반복돼서, 제가 점점 비어 가는 느낌이 듭니다.',
+        false,
+        true,
+        24,
+        1,
+        198,
+        now() - interval '5 hours',
+        now() - interval '5 hours'
+      ),
+      (
         v_solutions_id,
         v_author_id,
         '회사 그만두고 싶은데 당장 생활비가 무섭습니다',
@@ -194,6 +246,32 @@ begin
         147,
         now() - interval '3 hours',
         now() - interval '3 hours'
+      ),
+      (
+        v_solutions_id,
+        v_author_id,
+        '이직 준비를 몰래 하다가 팀장에게 들켰는데 어떻게 수습할까요',
+        '퇴근 후 면접을 보고 다닌 걸 팀장이 알게 됐습니다. 지금 회사에 남을 가능성도 완전히 없지는 않은데 이미 신뢰가 깨진 것 같아서, 어떤 태도로 정리해야 할지 고민입니다.',
+        false,
+        true,
+        22,
+        0,
+        186,
+        now() - interval '15 hours',
+        now() - interval '15 hours'
+      ),
+      (
+        v_solutions_id,
+        v_author_id,
+        '사과를 받아야 끝날 일인지 그냥 멀어지는 게 맞는지 모르겠습니다',
+        '상처를 준 사람이 있는데, 제대로 사과받고 정리해야 할지 아니면 더 기대하지 말고 조용히 멀어지는 게 맞을지 계속 흔들립니다. 비슷한 일을 겪은 분들 생각이 궁금합니다.',
+        false,
+        true,
+        20,
+        0,
+        169,
+        now() - interval '1 hours',
+        now() - interval '1 hours'
       )
   ) as seed_posts (
     board_id,

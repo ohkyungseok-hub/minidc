@@ -5,9 +5,15 @@ declare
   v_notice_post_id uuid;
   v_confession_post_id uuid;
   v_confession_post_2_id uuid;
+  v_confession_post_3_id uuid;
+  v_confession_post_4_id uuid;
   v_comfort_post_id uuid;
   v_comfort_post_2_id uuid;
+  v_comfort_post_3_id uuid;
+  v_comfort_post_4_id uuid;
   v_solution_post_id uuid;
+  v_solution_post_2_id uuid;
+  v_solution_post_3_id uuid;
 begin
   select id
   into v_author_id
@@ -45,6 +51,16 @@ begin
   where title = '부모님 지갑에서 돈을 가져간 적이 있다는 걸 아직 말 못했습니다'
   limit 1;
 
+  select id into v_confession_post_3_id
+  from public.posts
+  where title = '동생보다 잘되길 바라지 않았던 적이 있습니다'
+  limit 1;
+
+  select id into v_confession_post_4_id
+  from public.posts
+  where title = '부모님 전화를 일부러 계속 미뤘습니다'
+  limit 1;
+
   select id into v_comfort_post_id
   from public.posts
   where title = '오늘도 아무 일 없는 척 출근하고 왔어요'
@@ -55,17 +71,43 @@ begin
   where title = '육아가 버거운데 저만 약한 부모 같아요'
   limit 1;
 
+  select id into v_comfort_post_3_id
+  from public.posts
+  where title = '주말이 오면 더 외로운 사람이 저뿐은 아니었으면 좋겠어요'
+  limit 1;
+
+  select id into v_comfort_post_4_id
+  from public.posts
+  where title = '퇴근 후 아무것도 못 하고 누워만 있는 날이 많습니다'
+  limit 1;
+
   select id into v_solution_post_id
   from public.posts
   where title = '빚을 들키기 전에 정리하려면 무엇부터 해야 할까요'
   limit 1;
 
+  select id into v_solution_post_2_id
+  from public.posts
+  where title = '이직 준비를 몰래 하다가 팀장에게 들켰는데 어떻게 수습할까요'
+  limit 1;
+
+  select id into v_solution_post_3_id
+  from public.posts
+  where title = '사과를 받아야 끝날 일인지 그냥 멀어지는 게 맞는지 모르겠습니다'
+  limit 1;
+
   if v_notice_post_id is null
      or v_confession_post_id is null
      or v_confession_post_2_id is null
+     or v_confession_post_3_id is null
+     or v_confession_post_4_id is null
      or v_comfort_post_id is null
      or v_comfort_post_2_id is null
-     or v_solution_post_id is null then
+     or v_comfort_post_3_id is null
+     or v_comfort_post_4_id is null
+     or v_solution_post_id is null
+     or v_solution_post_2_id is null
+     or v_solution_post_3_id is null then
     raise exception 'Required sample posts are missing. Run 011_seed_sample_posts.sql first.';
   end if;
 
@@ -201,6 +243,126 @@ begin
         0,
         now() - interval '16 hours',
         now() - interval '16 hours'
+      ),
+      (
+        v_confession_post_3_id,
+        v_author_id,
+        '가족 안에서도 비교심이 드는 건 생각보다 흔한 감정 같아요. 그 마음을 인정했다고 해서 나쁜 사람이 되는 건 아니라고 말씀드리고 싶습니다.',
+        false,
+        4,
+        0,
+        now() - interval '12 hours',
+        now() - interval '12 hours'
+      ),
+      (
+        v_confession_post_3_id,
+        v_alt_author_id,
+        '저도 비슷한 감정 때문에 스스로를 많이 미워한 적이 있는데, 결국은 제 자리가 불안해서 그랬더라고요. 너무 오래 혼자 끌어안지 않으셨으면 합니다.',
+        false,
+        3,
+        0,
+        now() - interval '11 hours',
+        now() - interval '11 hours'
+      ),
+      (
+        v_confession_post_4_id,
+        v_author_id,
+        '전화를 피한 이유가 미움보다 지침에 가까웠다면, 스스로를 너무 심하게 몰아붙이지 않으셔도 될 것 같아요.',
+        false,
+        4,
+        0,
+        now() - interval '90 minutes',
+        now() - interval '90 minutes'
+      ),
+      (
+        v_confession_post_4_id,
+        v_alt_author_id,
+        '짧게라도 먼저 문자로 지금은 통화가 힘들다고 말해두면 죄책감이 조금 덜어질 수도 있습니다. 완벽한 대화를 하려고 하기보다 작은 시작이 더 현실적일 수 있어요.',
+        false,
+        3,
+        0,
+        now() - interval '70 minutes',
+        now() - interval '70 minutes'
+      ),
+      (
+        v_comfort_post_3_id,
+        v_author_id,
+        '주말이 더 외로운 사람 생각보다 정말 많아요. 오늘 하루만 버티는 계획을 세워보는 것도 조금 도움이 될 수 있습니다.',
+        false,
+        5,
+        0,
+        now() - interval '12 hours',
+        now() - interval '12 hours'
+      ),
+      (
+        v_comfort_post_3_id,
+        v_alt_author_id,
+        '괜찮다면 같은 시간에 산책이나 카페처럼 정해진 루틴 하나만 만들어보세요. 비어 있는 시간이 전부 나를 삼키지는 못하게 막아주는 느낌이 있더라고요.',
+        false,
+        4,
+        0,
+        now() - interval '11 hours',
+        now() - interval '11 hours'
+      ),
+      (
+        v_comfort_post_4_id,
+        v_author_id,
+        '지금은 게으른 게 아니라 너무 오래 지쳐 있었던 걸 수도 있습니다. 해야 할 일보다 먼저 회복이 필요한 상태처럼 느껴져요.',
+        false,
+        6,
+        0,
+        now() - interval '4 hours',
+        now() - interval '4 hours'
+      ),
+      (
+        v_comfort_post_4_id,
+        v_alt_author_id,
+        '퇴근 후에 딱 10분만 씻기나 쓰레기 버리기 같은 가장 작은 일 하나만 해보는 방식이 의외로 자책을 줄여주기도 했습니다.',
+        false,
+        5,
+        0,
+        now() - interval '3 hours',
+        now() - interval '3 hours'
+      ),
+      (
+        v_solution_post_2_id,
+        v_author_id,
+        '남을 가능성을 열어둘 거라면 변명보다 현재 업무는 끝까지 책임지겠다는 태도를 먼저 보여주는 게 안전해 보입니다.',
+        false,
+        4,
+        0,
+        now() - interval '14 hours',
+        now() - interval '14 hours'
+      ),
+      (
+        v_solution_post_2_id,
+        v_alt_author_id,
+        '이직 자체를 부정하기보다는 경력 고민이 있었다고 차분하게 말하고, 팀장과의 대화 내용은 최대한 감정적으로 번지지 않게 정리해두는 게 좋겠습니다.',
+        false,
+        4,
+        0,
+        now() - interval '13 hours',
+        now() - interval '13 hours'
+      ),
+      (
+        v_solution_post_3_id,
+        v_author_id,
+        '사과를 받아야 끝나는 관계도 있지만, 끝내는 방식은 내 평온을 기준으로 정해도 된다고 생각합니다. 꼭 상대의 납득까지 받아내야 마무리되는 건 아니더라고요.',
+        false,
+        5,
+        0,
+        now() - interval '7 hours',
+        now() - interval '7 hours'
+      ),
+      (
+        v_solution_post_3_id,
+        v_alt_author_id,
+        '내가 원하는 게 진짜 사과인지, 다시는 엮이지 않는 안전거리인지 먼저 적어보시면 결정이 조금 쉬워질 것 같습니다.',
+        false,
+        4,
+        0,
+        now() - interval '6 hours',
+        now() - interval '6 hours'
       )
   ) as seed_comments (
     post_id,
