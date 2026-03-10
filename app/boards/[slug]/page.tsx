@@ -26,13 +26,19 @@ export default async function BoardDetailPage({
   const { page: rawPage, q: rawQuery } = await searchParams;
   const query = rawQuery?.trim() ?? "";
   const page = Number.isNaN(Number(rawPage)) ? 1 : Math.max(Number(rawPage ?? 1), 1);
-  const [boards, board] = await Promise.all([getBoards(), getBoardBySlug(slug)]);
+  // Start getBoards() immediately; await the board lookup in parallel,
+  // then kick off the feed query as soon as the board id is known.
+  const boardsPromise = getBoards();
+  const board = await getBoardBySlug(slug);
 
   if (!board) {
     notFound();
   }
 
-  const feed = await getBoardPostFeedBySlug(board, { page, query });
+  const [boards, feed] = await Promise.all([
+    boardsPromise,
+    getBoardPostFeedBySlug(board, { page, query }),
+  ]);
 
   return (
     <div className="space-y-6">

@@ -60,6 +60,8 @@ export default function PostDetail({
               <img
                 src={url}
                 alt={`첨부 이미지 ${i + 1}`}
+                loading="lazy"
+                decoding="async"
                 className="h-48 w-full object-cover transition hover:opacity-90"
               />
             </a>

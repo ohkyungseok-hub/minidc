@@ -491,16 +491,19 @@ export async function getFeaturedPosts() {
   return (data as SupabasePostDetailRow[]).map(toPost);
 }
 
-export async function getNoticePosts() {
+export async function getNoticePosts(): Promise<PostListItem[]> {
   const supabase = await createSupabaseServer();
 
   if (!supabase) {
-    return mockPosts.filter((post) => post.is_notice && !post.is_hidden).slice(0, 5);
+    return mockPosts
+      .filter((post) => post.is_notice && !post.is_hidden)
+      .slice(0, 5)
+      .map(getMockPostListItem);
   }
 
   const { data, error } = await supabase
     .from("posts")
-    .select(postDetailSelect)
+    .select(boardPostFeedSelect)
     .eq("is_notice", true)
     .eq("is_hidden", false)
     .order("created_at", { ascending: false })
@@ -510,7 +513,7 @@ export async function getNoticePosts() {
     return [];
   }
 
-  return (data as SupabasePostDetailRow[]).map(toPost);
+  return (data as SupabasePostFeedRow[]).map(toPostListItem);
 }
 
 export async function getPopularPosts(options: PopularPostsOptions = {}) {

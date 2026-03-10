@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import type { Post } from "@/types";
+import type { PostListItem } from "@/types";
 
 type NoticeListProps = {
-  posts: Post[];
+  posts: PostListItem[];
 };
 
 export default function NoticeList({ posts }: NoticeListProps) {

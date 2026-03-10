@@ -23,17 +23,18 @@ export default async function PostDetailPage({
 }: PostDetailPageProps) {
   const { id } = await params;
   const { commentError } = await searchParams;
-  const [post, comments, currentUser] = await Promise.all([
+  // getSessionUser is React-cached; calling it first lets the 3 heavier
+  // DB queries start in parallel while auth resolves concurrently.
+  const currentUser = await getSessionUser();
+  const [post, comments, voteState] = await Promise.all([
     getPostById(id),
     getCommentsByPostId(id),
-    getSessionUser(),
+    getPostVoteState(id, currentUser?.id),
   ]);
 
   if (!post) {
     notFound();
   }
-
-  const voteState = await getPostVoteState(post.id, currentUser?.id);
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
