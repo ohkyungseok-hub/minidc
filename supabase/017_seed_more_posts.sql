@@ -111,7 +111,6 @@ begin
       now() - interval '2 days', null
     )
 
-  ) as t(board_id, author_id, title, content, is_notice, is_anonymous, up_count, down_count, view_count, created_at, updated_at)
-  ::( uuid, uuid, varchar, text, boolean, boolean, integer, integer, integer, timestamptz, timestamptz );
+  ) as seed_posts(board_id, author_id, title, content, is_notice, is_anonymous, up_count, down_count, view_count, created_at, updated_at);
 
 end $$;
