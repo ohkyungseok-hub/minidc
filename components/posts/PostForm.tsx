@@ -87,7 +87,7 @@ export default function PostForm({
                 title: event.target.value,
               }))
             }
-            placeholder="한 줄로 핵심을 드러내는 제목"
+            placeholder="지금 꺼내고 싶은 이야기를 한 줄로 적어보세요"
             className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
           />
         </label>
@@ -103,7 +103,7 @@ export default function PostForm({
               }))
             }
             rows={12}
-            placeholder="본문 내용을 입력하세요"
+            placeholder="누구에게도 말 못했던 일, 위로받고 싶은 마음, 해결이 필요한 고민을 편하게 적어보세요"
             className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-amber-600"
           />
         </label>
@@ -148,7 +148,8 @@ export default function PostForm({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-slate-500">
             로그인한 사용자의 글로 저장되며, 익명 체크 시 목록과 상세 화면에는
-            작성자가 `익명`으로 표시됩니다.
+            작성자가 `익명`으로 표시됩니다. 누군가의 고백을 가볍게 소비하지 않는
+            방향으로 써주세요.
           </p>
           <SubmitButton label={submitLabel} />
         </div>
@@ -156,13 +157,13 @@ export default function PostForm({
 
       <aside className="rounded-[2rem] border border-black/10 bg-slate-950 p-6 text-white shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">
-          Live Preview
+          bless you
         </p>
         <h3 className="mt-4 text-2xl font-bold tracking-tight">
           {values.title || "제목 미리보기"}
         </h3>
         <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-slate-200">
-          {deferredContent || "본문을 입력하면 이 영역에 미리보기가 표시됩니다."}
+          {deferredContent || "지금 적는 이야기가 이 영역에 미리 보입니다."}
         </p>
         {values.isAnonymous ? (
           <div className="mt-4 inline-flex rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-950">

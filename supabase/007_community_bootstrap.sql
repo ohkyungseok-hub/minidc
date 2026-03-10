@@ -143,9 +143,9 @@ insert into public.boards (
   is_active
 )
 values
-  ('general', '자유', '가벼운 잡담과 링크 공유를 위한 기본 게시판', 10, true),
-  ('dev', '개발', 'Next.js, Supabase, 배포 이슈를 다루는 공간', 20, true),
-  ('design', '디자인', 'UI 레이아웃, 인터랙션, 브랜딩 시안을 논의하는 공간', 30, true)
+  ('confession', '고해성사', '누구에게도 말 못할 일을 고백해보세요. 조금이나마 마음이 편안해질거예요', 10, true),
+  ('comfort', '위로받고 싶어요', '삶이 힘든신가요? 위로받고 싶은 일이 있다면 알려주세요. 저희가 함께 응원해드릴게요.', 20, true),
+  ('solutions', '해결책을 제시해주세요', '지피티가 해결하지 못한 삶의 지혜가 필요하신가요? 집단지성으로 당신을 도와드릴게요', 30, true)
 on conflict (slug) do update
 set
   name = excluded.name,

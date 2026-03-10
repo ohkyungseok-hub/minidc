@@ -30,12 +30,12 @@ export default async function BoardsPage({ searchParams }: BoardsPageProps) {
         description={
           query
             ? `‘${query}’ 검색 결과 ${filteredBoards.length}개의 게시판을 찾았습니다.`
-            : "게시판형 목록 레이아웃으로 전체 게시판을 빠르게 둘러볼 수 있습니다."
+            : "고백, 위로, 해결책 세 게시판으로 나뉜 구조입니다. 지금 마음에 가까운 공간을 골라 들어가 보세요."
         }
         action={(
           <SearchForm
             action="/boards"
-            placeholder="게시판 검색"
+            placeholder="게시판 이름이나 설명 검색"
             defaultValue={query}
             className="w-full sm:w-[280px]"
           />

@@ -49,7 +49,7 @@ export default async function BoardDetailPage({
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
             <SearchForm
               action={`/boards/${board.slug}`}
-              placeholder={`${board.name} 게시판 검색`}
+              placeholder={`${board.name} 안에서 이야기 검색`}
               defaultValue={query}
               className="w-full sm:w-[280px]"
             />
@@ -84,7 +84,7 @@ export default async function BoardDetailPage({
         </div>
         <PostFeedTable
           posts={feed.posts.items}
-          emptyMessage="이 게시판에는 아직 일반 글이 없습니다."
+          emptyMessage="이 게시판에는 아직 올라온 이야기가 없습니다."
         />
       </section>
     </div>

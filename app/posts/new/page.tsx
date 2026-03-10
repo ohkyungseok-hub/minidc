@@ -22,7 +22,7 @@ export default async function NewPostPage({ searchParams }: NewPostPageProps) {
       <SectionTitle
         eyebrow="Write"
         title="새 글 작성"
-        description="제목, 본문, 익명 여부를 입력한 뒤 저장하면 상세 페이지로 이동합니다."
+        description="고백하고 싶은 일, 위로가 필요한 순간, 해결책이 필요한 고민을 익명으로 남길 수 있습니다."
       />
       <PostForm
         boards={boards}

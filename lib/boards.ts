@@ -11,32 +11,32 @@ type SupabaseBoardRow = {
 
 export const mockBoards: Board[] = [
   {
-    id: "board-general",
-    slug: "general",
-    name: "자유",
-    description: "가벼운 잡담과 링크 공유를 위한 기본 게시판",
-    accent: "#f59e0b",
+    id: "board-confession",
+    slug: "confession",
+    name: "고해성사",
+    description: "누구에게도 말 못할 일을 고백해보세요. 조금이나마 마음이 편안해질거예요",
+    accent: "#7c3aed",
     created_at: "2026-03-09T09:00:00.000Z",
   },
   {
-    id: "board-dev",
-    slug: "dev",
-    name: "개발",
-    description: "Next.js, Supabase, 배포 이슈를 다루는 공간",
-    accent: "#0f172a",
+    id: "board-comfort",
+    slug: "comfort",
+    name: "위로받고 싶어요",
+    description: "삶이 힘든신가요? 위로받고 싶은 일이 있다면 알려주세요. 저희가 함께 응원해드릴게요.",
+    accent: "#2563eb",
     created_at: "2026-03-09T09:10:00.000Z",
   },
   {
-    id: "board-design",
-    slug: "design",
-    name: "디자인",
-    description: "UI 레이아웃, 인터랙션, 브랜딩 시안을 논의하는 공간",
-    accent: "#dc2626",
+    id: "board-solutions",
+    slug: "solutions",
+    name: "해결책을 제시해주세요",
+    description: "지피티가 해결하지 못한 삶의 지혜가 필요하신가요? 집단지성으로 당신을 도와드릴게요",
+    accent: "#0f766e",
     created_at: "2026-03-09T09:20:00.000Z",
   },
 ];
 
-const boardAccentPalette = ["#f59e0b", "#0f172a", "#dc2626", "#0369a1", "#166534"];
+const boardAccentPalette = ["#7c3aed", "#2563eb", "#0f766e", "#be123c", "#0369a1"];
 
 function attachBoardAccent(board: Omit<Board, "accent">, index = 0): Board {
   const fallback = mockBoards.find((item) => item.slug === board.slug)?.accent;

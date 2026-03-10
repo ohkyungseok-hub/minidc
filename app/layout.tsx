@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: "BLACKPEARLS",
     template: "%s | BLACKPEARLS",
   },
-  description: "Supabase 기반으로 확장하기 쉬운 미니 커뮤니티 스캐폴드",
+  description: "익명 고백과 위로, 삶의 지혜를 나누는 커뮤니티. bless you.",
 };
 
 export default function RootLayout({

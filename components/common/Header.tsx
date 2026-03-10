@@ -24,7 +24,7 @@ export default async function Header() {
                     BLACKPEARLS
                   </p>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#2f5ea9]">
-                    community board
+                    bless you
                   </p>
                 </div>
               </Link>
@@ -77,7 +77,7 @@ export default async function Header() {
             <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
               <SearchForm
                 action="/boards"
-                placeholder="게시판 이름이나 설명 검색"
+                placeholder="고백, 위로, 해결책 게시판 검색"
                 className="w-full min-w-0 xl:w-[360px]"
               />
               {user ? (
