@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { signIn } from "@/app/(auth)/actions";
+import LoginButton from "@/components/auth/LoginButton";
 import SectionTitle from "@/components/common/SectionTitle";
 import { getSessionUser } from "@/lib/auth";
 
@@ -63,12 +64,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
             />
           </label>
-          <button
-            type="submit"
-            className="w-full rounded-2xl bg-[var(--primary)] px-4 py-3 font-semibold text-[var(--primary-ink)]"
-          >
-            로그인
-          </button>
+          <LoginButton />
         </form>
         <p className="mt-5 text-sm text-slate-500">
           계정이 없으면{" "}
