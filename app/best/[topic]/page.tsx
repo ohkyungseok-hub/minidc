@@ -6,7 +6,7 @@ import SectionTitle from "@/components/common/SectionTitle";
 import PostFeedTable from "@/components/posts/PostFeedTable";
 import { buildMetadata } from "@/config/seo";
 import { TOPICS, isValidTopicSlug } from "@/config/topics";
-import { getPopularPosts } from "@/lib/posts";
+import { getPostsByTopic, getPopularPosts } from "@/lib/posts";
 
 type BestTopicPageProps = {
   params: Promise<{ topic: string }>;
@@ -41,8 +41,10 @@ export default async function BestTopicPage({ params }: BestTopicPageProps) {
 
   const t = TOPICS[topic];
 
-  // TODO: topic 키워드 필터 또는 topic 컬럼으로 교체 필요
-  const posts = await getPopularPosts({ limit: 30 });
+  const topicResult = await getPostsByTopic(topic, { limit: 30 });
+  const posts = topicResult.totalCount > 0
+    ? topicResult.items
+    : (await getPopularPosts({ limit: 20 }));
 
   const relatedTopics = t.relatedTopics.map((slug) => TOPICS[slug]);
 

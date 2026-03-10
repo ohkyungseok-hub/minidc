@@ -54,6 +54,7 @@ export type Database = {
         down_count: number;
         view_count: number;
         images: string[];
+        topic: "work" | "relationship" | "family" | "anxiety" | "loneliness" | "money" | null;
         created_at: string;
         updated_at: string | null;
       }>;

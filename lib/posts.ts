@@ -290,6 +290,7 @@ type SupabasePostDetailRow = {
   down_count: number | null;
   view_count: number | null;
   images: string[];
+  topic: "work" | "relationship" | "family" | "anxiety" | "loneliness" | "money" | null;
   created_at: string;
   updated_at: string | null;
   author: { id: string; nickname: string; role: "user" | "admin"; level: number; warning_count: number; is_suspended: boolean; suspended_until: string | null; avatar_url: string | null; created_at: string; updated_at: string | null } | { id: string; nickname: string; role: "user" | "admin"; level: number; warning_count: number; is_suspended: boolean; suspended_until: string | null; avatar_url: string | null; created_at: string; updated_at: string | null }[] | null;
@@ -313,6 +314,7 @@ const postDetailSelect = `
   down_count,
   view_count,
   images,
+  topic,
   created_at,
   updated_at,
   author:users!posts_author_id_fkey (
@@ -354,6 +356,7 @@ function toPost(record: SupabasePostDetailRow): Post {
     down_count: record.down_count ?? 0,
     view_count: record.view_count ?? 0,
     images: record.images ?? [],
+    topic: record.topic ?? null,
     created_at: record.created_at,
     updated_at: record.updated_at,
     author: author
@@ -398,6 +401,7 @@ let mockPosts: Post[] = [
     down_count: 1,
     view_count: 214,
     images: [],
+    topic: null,
     created_at: "2026-03-09T12:00:00.000Z",
     updated_at: null,
     board: bySlug("confession"),
@@ -419,6 +423,7 @@ let mockPosts: Post[] = [
     down_count: 2,
     view_count: 318,
     images: [],
+    topic: "anxiety",
     created_at: "2026-03-09T13:30:00.000Z",
     updated_at: null,
     board: bySlug("comfort"),
@@ -440,6 +445,7 @@ let mockPosts: Post[] = [
     down_count: 1,
     view_count: 181,
     images: [],
+    topic: "money",
     created_at: "2026-03-09T14:10:00.000Z",
     updated_at: null,
     board: bySlug("solutions"),
@@ -461,6 +467,7 @@ let mockPosts: Post[] = [
     down_count: 0,
     view_count: 143,
     images: [],
+    topic: "anxiety",
     created_at: "2026-03-09T15:00:00.000Z",
     updated_at: null,
     board: bySlug("confession"),
@@ -584,6 +591,48 @@ export async function searchPosts(query: string, page = 1, pageSize = 20): Promi
     .range(from, to);
 
   if (error || !data) return empty;
+
+  return createPaginatedList(
+    (data as SupabasePostFeedRow[]).map(toPostListItem),
+    page,
+    pageSize,
+    count ?? 0,
+  );
+}
+
+export async function getPostsByTopic(
+  topic: string,
+  options: { limit?: number; page?: number; pageSize?: number } = {},
+): Promise<PaginatedList<PostListItem>> {
+  const page = normalizePage(options.page ?? 1);
+  const pageSize = normalizePageSize(options.pageSize ?? 20);
+  const limit = options.limit ?? pageSize;
+  const from = (page - 1) * pageSize;
+  const to = from + limit - 1;
+
+  const supabase = await createSupabaseServer();
+
+  if (!supabase) {
+    const items = mockPosts
+      .filter((p) => !p.is_hidden && !p.is_notice)
+      .slice(from, from + limit)
+      .map(getMockPostListItem);
+    return createPaginatedList(items, page, pageSize, mockPosts.length);
+  }
+
+  const { data, count, error } = await supabase
+    .from("posts")
+    .select(boardPostFeedSelect, { count: "exact" })
+    .eq("topic", topic)
+    .eq("is_hidden", false)
+    .eq("is_notice", false)
+    .order("up_count", { ascending: false })
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error || !data) {
+    return createPaginatedList([], page, pageSize, 0);
+  }
 
   return createPaginatedList(
     (data as SupabasePostFeedRow[]).map(toPostListItem),
@@ -757,6 +806,7 @@ export async function createPost({
   isAnonymous = false,
   authorId,
   images = [],
+  topic,
 }: {
   boardId: string;
   title: string;
@@ -765,6 +815,7 @@ export async function createPost({
   isAnonymous?: boolean;
   authorId?: string;
   images?: string[];
+  topic?: string | null;
 }) {
   const supabase = await createSupabaseServer();
 
@@ -777,6 +828,7 @@ export async function createPost({
       is_notice: isNotice,
       is_anonymous: isAnonymous,
       images,
+      ...(topic ? { topic } : {}),
     };
 
     const { data, error } = await supabase
@@ -812,6 +864,7 @@ export async function createPost({
     down_count: 0,
     view_count: 0,
     images: images ?? [],
+    topic: null,
     created_at: new Date().toISOString(),
     updated_at: null,
     board,
@@ -834,6 +887,7 @@ export async function updatePost(
     isAnonymous,
     authorId,
     images,
+    topic,
   }: {
     boardId?: string;
     title?: string;
@@ -842,6 +896,7 @@ export async function updatePost(
     isAnonymous?: boolean;
     authorId?: string;
     images?: string[];
+    topic?: string | null;
   },
 ) {
   const supabase = await createSupabaseServer();
@@ -853,6 +908,7 @@ export async function updatePost(
       content?: string;
       is_notice?: boolean;
       is_anonymous?: boolean;
+      topic?: string | null;
     } = {};
 
     if (boardId) {
@@ -877,6 +933,10 @@ export async function updatePost(
 
     if (images !== undefined) {
       (payload as Record<string, unknown>).images = images;
+    }
+
+    if (topic !== undefined) {
+      payload.topic = topic ?? null;
     }
 
     const { data, error } = await supabase

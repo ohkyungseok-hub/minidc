@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 
 import ImageUploader from "@/components/common/ImageUploader";
 import type { Board, PostFormValues } from "@/types";
+import { TOPICS, TOPIC_SLUGS } from "@/config/topics";
 
 type PostFormProps = {
   boards: Board[];
@@ -23,6 +24,7 @@ const emptyValues: PostFormValues = {
   isAnonymous: false,
   isNotice: false,
   images: [],
+  topic: "",
 };
 
 function SubmitButton({ label }: { label: string }) {
@@ -76,6 +78,27 @@ export default function PostForm({
             {boards.map((board) => (
               <option key={board.id} value={board.id}>
                 {board.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block space-y-2">
+          <span className="text-sm font-semibold text-slate-700">고민 주제 (선택)</span>
+          <select
+            name="topic"
+            value={values.topic}
+            onChange={(event) =>
+              setValues((current) => ({
+                ...current,
+                topic: event.target.value as PostFormValues["topic"],
+              }))
+            }
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
+          >
+            <option value="">주제 선택 안 함</option>
+            {TOPIC_SLUGS.map((slug) => (
+              <option key={slug} value={slug}>
+                {TOPICS[slug].emoji} {TOPICS[slug].label}
               </option>
             ))}
           </select>

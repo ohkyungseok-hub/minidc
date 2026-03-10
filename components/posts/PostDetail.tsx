@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { deletePostAction } from "@/app/posts/actions";
 import type { Post, PostVoteState } from "@/types";
+import { getPostUrl } from "@/lib/utils";
 
 import VoteButtons from "./VoteButtons";
 
@@ -76,7 +77,7 @@ export default function PostDetail({
           initialDownCount={voteState?.downCount ?? post.down_count}
           initialVote={voteState?.currentVote ?? 0}
           isAuthenticated={Boolean(currentUserId)}
-          loginHref={`/login?next=${encodeURIComponent(`/posts/${post.id}`)}`}
+          loginHref={`/login?next=${encodeURIComponent(getPostUrl(post.id, post.title))}`}
         />
         {canManage ? (
           <div className="flex flex-wrap items-center gap-3">

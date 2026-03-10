@@ -5,8 +5,14 @@ import Header from "@/components/common/Header";
 import VisitTracker from "@/components/common/VisitTracker";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/config/seo";
 
+// GSC 인증: .env.local에 NEXT_PUBLIC_GSC_VERIFICATION=... 추가 후 자동 적용
+const gscVerification = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  ...(gscVerification && {
+    verification: { google: gscVerification },
+  }),
   title: {
     default: `${SITE_NAME} | 익명 고백 커뮤니티, 위로와 공감을 나누는 공간`,
     template: `%s | ${SITE_NAME}`,

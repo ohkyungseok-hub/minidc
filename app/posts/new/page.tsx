@@ -38,6 +38,7 @@ export default async function NewPostPage({ searchParams }: NewPostPageProps) {
           isAnonymous: false,
           isNotice: false,
           images: [],
+          topic: "",
         }}
       />
     </div>

@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import type { TopicValue } from "@/types";
 
 import { updatePostAction } from "@/app/posts/actions";
 import PostForm from "@/components/posts/PostForm";
@@ -23,7 +24,8 @@ export default async function EditPostPage({
   const user = await requireUser("/login");
   const { id } = await params;
   const { error } = await searchParams;
-  const [boards, post] = await Promise.all([getBoards(), getPostById(id)]);
+  const postId = id.substring(0, 36);
+  const [boards, post] = await Promise.all([getBoards(), getPostById(postId)]);
 
   if (!post) {
     notFound();
@@ -50,6 +52,7 @@ export default async function EditPostPage({
           isAnonymous: post.is_anonymous,
           isNotice: post.is_notice,
           images: post.images ?? [],
+          topic: (post.topic as TopicValue) ?? "",
         }}
         submitLabel="수정 저장"
         errorMessage={error}

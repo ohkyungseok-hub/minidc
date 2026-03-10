@@ -6,6 +6,11 @@ export type TopicSlug =
   | "loneliness"
   | "money";
 
+export type TopicFaq = {
+  question: string;
+  answer: string;
+};
+
 export type TopicConfig = {
   slug: TopicSlug;
   /** 화면 표시용 한글 라벨 */
@@ -27,8 +32,10 @@ export type TopicConfig = {
   relatedTopics: TopicSlug[];
   /** 관련 게시판 slugs (boards 테이블 slug) */
   boardSlugs: string[];
-  /** DB 키워드 검색용 (추후 topic 필드 추가 시 교체 가능) */
+  /** DB 키워드 검색용 */
   keywords: string[];
+  /** FAQ (People Also Ask 대응, FAQPage JSON-LD) */
+  faqs: TopicFaq[];
 };
 
 export const TOPICS: Record<TopicSlug, TopicConfig> = {
@@ -48,6 +55,20 @@ export const TOPICS: Record<TopicSlug, TopicConfig> = {
     relatedTopics: ["money", "anxiety"],
     boardSlugs: ["confession", "solutions"],
     keywords: ["직장", "상사", "퇴사", "번아웃", "회사", "업무", "야근", "이직"],
+    faqs: [
+      {
+        question: "직장 스트레스를 익명으로 털어놓을 수 있는 공간이 있나요?",
+        answer: "블랙펄즈에서는 직장 스트레스, 상사 문제, 퇴사 고민, 번아웃 등을 익명으로 자유롭게 이야기할 수 있습니다. 회원가입 없이도 글을 읽을 수 있습니다.",
+      },
+      {
+        question: "퇴사 고민을 주변에 말하기 어려울 때 어떻게 하나요?",
+        answer: "퇴사 결정은 혼자 감당하기 어렵습니다. 블랙펄즈의 익명 공간에서 솔직한 고민을 꺼내고, 비슷한 경험을 가진 사람들의 이야기를 통해 힌트를 얻어보세요.",
+      },
+      {
+        question: "번아웃인지 어떻게 알 수 있나요?",
+        answer: "매일 출근이 버겁고, 작은 일에도 에너지가 소진되며, 이전에 좋아하던 일도 의욕이 사라진다면 번아웃일 수 있습니다. 블랙펄즈에서 같은 경험을 나누는 이야기를 찾아보세요.",
+      },
+    ],
   },
   relationship: {
     slug: "relationship",
@@ -65,6 +86,20 @@ export const TOPICS: Record<TopicSlug, TopicConfig> = {
     relatedTopics: ["loneliness", "anxiety"],
     boardSlugs: ["confession", "comfort"],
     keywords: ["연애", "이별", "짝사랑", "권태기", "남자친구", "여자친구", "실연"],
+    faqs: [
+      {
+        question: "연애 고민을 익명으로 털어놓을 수 있는 곳이 있나요?",
+        answer: "블랙펄즈에서는 이별, 짝사랑, 권태기, 집착 등 연애에서 말 못한 감정을 익명으로 자유롭게 이야기할 수 있습니다.",
+      },
+      {
+        question: "이별 후 힘든 마음을 어떻게 털어놓을 수 있나요?",
+        answer: "이별 후의 감정은 쉽게 꺼내기 어렵습니다. 블랙펄즈에서 익명으로 솔직한 마음을 적고, 비슷한 경험을 가진 사람들의 위로와 공감을 받아보세요.",
+      },
+      {
+        question: "짝사랑 고백을 해야 할지 어떻게 판단하나요?",
+        answer: "정답은 없습니다. 블랙펄즈에서 비슷한 상황을 겪은 사람들의 이야기를 읽으며 자신에게 맞는 선택을 찾아가세요.",
+      },
+    ],
   },
   family: {
     slug: "family",
@@ -82,6 +117,20 @@ export const TOPICS: Record<TopicSlug, TopicConfig> = {
     relatedTopics: ["anxiety", "loneliness"],
     boardSlugs: ["confession", "comfort"],
     keywords: ["가족", "부모", "형제", "부부", "엄마", "아빠", "시댁", "갈등"],
+    faqs: [
+      {
+        question: "가족 문제를 주변에 말하기 어려울 때 어디에 털어놓나요?",
+        answer: "가족 문제는 친구에게도 꺼내기 어렵습니다. 블랙펄즈에서는 부모 갈등, 형제 불화, 부부 문제 등을 익명으로 이야기하고 공감을 받을 수 있습니다.",
+      },
+      {
+        question: "부모님과의 갈등을 혼자 감당하기 힘들 때 어떻게 하나요?",
+        answer: "혼자 끌어안고 있는 무게를 내려놓는 것이 먼저입니다. 블랙펄즈에서 익명으로 상황을 털어놓고 비슷한 경험을 나눈 사람들의 이야기를 들어보세요.",
+      },
+      {
+        question: "시댁·처가 문제를 배우자에게 말하기 어려울 때는?",
+        answer: "가장 말하기 어려운 주제 중 하나입니다. 블랙펄즈에서 익명으로 상황을 공유하고 다양한 시각의 조언을 구해보세요.",
+      },
+    ],
   },
   anxiety: {
     slug: "anxiety",
@@ -99,6 +148,20 @@ export const TOPICS: Record<TopicSlug, TopicConfig> = {
     relatedTopics: ["loneliness", "work", "family"],
     boardSlugs: ["comfort", "confession"],
     keywords: ["불안", "우울", "걱정", "멘탈", "힘들다", "스트레스", "공황", "무기력"],
+    faqs: [
+      {
+        question: "이유 없이 불안한 감정을 익명으로 털어놓을 수 있나요?",
+        answer: "블랙펄즈에서는 이유를 설명하기 어려운 불안, 우울감, 무기력감도 익명으로 자유롭게 꺼낼 수 있습니다. 같은 감정을 겪는 사람들의 이야기가 당신 옆에 있습니다.",
+      },
+      {
+        question: "우울한지 번아웃인지 모르겠을 때 어떻게 하나요?",
+        answer: "정확한 진단은 전문가에게 받는 것이 좋습니다. 블랙펄즈에서 비슷한 감정을 겪어본 사람들의 이야기를 통해 자신의 상태를 돌아보는 계기를 만들어보세요.",
+      },
+      {
+        question: "멘탈이 흔들릴 때 혼자 버티는 방법이 있나요?",
+        answer: "혼자 버티기보다 표현하는 것이 도움이 됩니다. 블랙펄즈에서 익명으로 현재 감정을 기록하고, 같은 시간을 버텨온 사람들의 이야기에서 힘을 얻어보세요.",
+      },
+    ],
   },
   loneliness: {
     slug: "loneliness",
@@ -116,6 +179,20 @@ export const TOPICS: Record<TopicSlug, TopicConfig> = {
     relatedTopics: ["anxiety", "relationship"],
     boardSlugs: ["comfort", "confession"],
     keywords: ["외로움", "고독", "혼자", "공허", "고립", "쓸쓸", "소외"],
+    faqs: [
+      {
+        question: "외롭고 공허한 마음을 익명으로 이야기할 수 있나요?",
+        answer: "블랙펄즈에서는 설명하기 어려운 외로움, 고독감, 공허한 감정을 익명으로 털어놓고 공감과 위로를 받을 수 있습니다.",
+      },
+      {
+        question: "사람들이 있어도 혼자인 느낌이 드는 이유가 무엇인가요?",
+        answer: "연결되어 있지만 단절된 느낌은 많은 사람이 공유하는 감정입니다. 블랙펄즈에서 비슷한 경험을 가진 사람들의 이야기를 통해 당신이 혼자가 아님을 느껴보세요.",
+      },
+      {
+        question: "외로움을 해소할 방법을 찾고 있어요",
+        answer: "외로움의 해소는 거창한 방법보다 작은 연결에서 시작됩니다. 블랙펄즈에서 익명으로 마음을 나누며 비슷한 감정을 가진 사람들과 연결되어 보세요.",
+      },
+    ],
   },
   money: {
     slug: "money",
@@ -133,6 +210,20 @@ export const TOPICS: Record<TopicSlug, TopicConfig> = {
     relatedTopics: ["work", "anxiety"],
     boardSlugs: ["solutions", "confession"],
     keywords: ["돈", "빚", "생활비", "경제", "월급", "대출", "파산", "가난"],
+    faqs: [
+      {
+        question: "돈 문제를 익명으로 털어놓을 수 있는 공간이 있나요?",
+        answer: "블랙펄즈에서는 생활비 부족, 빚, 경제적 압박 등 돈 문제를 익명으로 자유롭게 이야기하고 비슷한 상황의 사람들과 공감을 나눌 수 있습니다.",
+      },
+      {
+        question: "빚이 있다는 사실을 가족에게 말하지 못하고 있어요",
+        answer: "돈 문제는 가장 가까운 사람에게도 말하기 어렵습니다. 블랙펄즈에서 익명으로 상황을 공유하고, 비슷한 상황을 겪어온 사람들의 경험과 조언을 구해보세요.",
+      },
+      {
+        question: "경제적 압박으로 미래가 막막할 때 어떻게 하나요?",
+        answer: "막막함을 혼자 안고 있으면 더 무거워집니다. 블랙펄즈에서 익명으로 현재 상황을 털어놓고 같은 무게를 지고 있는 사람들의 이야기에서 실마리를 찾아보세요.",
+      },
+    ],
   },
 };
 

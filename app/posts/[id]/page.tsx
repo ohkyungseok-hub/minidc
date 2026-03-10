@@ -10,6 +10,7 @@ import { getCommentsByPostId } from "@/lib/comments";
 import { getPostById, getPopularPosts } from "@/lib/posts";
 import { getPostVoteState } from "@/lib/votes";
 import { buildPostMetadata, SITE_URL } from "@/config/seo";
+import { extractPostId, getPostUrl } from "@/lib/utils";
 
 type PostDetailPageProps = {
   params: Promise<{
@@ -22,7 +23,7 @@ type PostDetailPageProps = {
 
 export async function generateMetadata({ params }: PostDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const post = await getPostById(id);
+  const post = await getPostById(extractPostId(id));
 
   if (!post) {
     return { title: "게시글을 찾을 수 없습니다" };
@@ -44,13 +45,14 @@ export default async function PostDetailPage({
 }: PostDetailPageProps) {
   const { id } = await params;
   const { commentError } = await searchParams;
+  const postId = extractPostId(id); // pretty URL 호환: UUID 36자 추출
   // getSessionUser is React-cached; calling it first lets the 3 heavier
   // DB queries start in parallel while auth resolves concurrently.
   const currentUser = await getSessionUser();
   const [post, comments, voteState, relatedPosts] = await Promise.all([
-    getPostById(id),
-    getCommentsByPostId(id),
-    getPostVoteState(id, currentUser?.id),
+    getPostById(postId),
+    getCommentsByPostId(postId),
+    getPostVoteState(postId, currentUser?.id),
     getPopularPosts({ limit: 5 }),
   ]);
 
@@ -126,7 +128,7 @@ export default async function PostDetailPage({
                 .map((p) => (
                   <li key={p.id}>
                     <Link
-                      href={`/posts/${p.id}`}
+                      href={getPostUrl(p.id, p.title)}
                       className="flex items-center justify-between gap-3 py-3 text-sm text-slate-700 transition hover:text-[var(--primary-ink)]"
                     >
                       <span className="truncate font-semibold">{p.title}</span>

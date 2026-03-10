@@ -13,19 +13,24 @@ type PostFormInput = {
   content: string;
   isAnonymous: boolean;
   images: string[];
+  topic: string | null;
 };
 
 function encodeMessage(message: string) {
   return encodeURIComponent(message);
 }
 
+const VALID_TOPICS = new Set(["work", "relationship", "family", "anxiety", "loneliness", "money"]);
+
 function normalizeFormData(formData: FormData): PostFormInput {
+  const rawTopic = String(formData.get("topic") ?? "").trim();
   return {
     boardId: String(formData.get("boardId") ?? "").trim(),
     title: String(formData.get("title") ?? "").trim(),
     content: String(formData.get("content") ?? "").trim(),
     isAnonymous: formData.get("isAnonymous") === "on",
     images: formData.getAll("images").map(String).filter(Boolean),
+    topic: VALID_TOPICS.has(rawTopic) ? rawTopic : null,
   };
 }
 
@@ -92,6 +97,7 @@ export async function createPostAction(formData: FormData) {
     isAnonymous: input.isAnonymous,
     authorId: user.id,
     images: input.images,
+    topic: input.topic,
   });
 
   revalidatePostPages(post.board?.slug ?? board.slug, post.id);
@@ -136,6 +142,7 @@ export async function updatePostAction(postId: string, formData: FormData) {
     isAnonymous: input.isAnonymous,
     authorId: user.id,
     images: input.images,
+    topic: input.topic,
   });
 
   revalidatePostPages(currentPost.board?.slug ?? null, postId);

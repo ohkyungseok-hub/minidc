@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { PostListItem } from "@/types";
+import { getPostUrl } from "@/lib/utils";
 
 type NoticeListProps = {
   posts: PostListItem[];
@@ -16,7 +17,7 @@ export default function NoticeList({ posts }: NoticeListProps) {
       {posts.map((post) => (
         <Link
           key={post.id}
-          href={`/posts/${post.id}`}
+          href={getPostUrl(post.id, post.title)}
           className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--line)] px-4 py-3 transition last:border-b-0 hover:bg-[var(--sub-soft)] md:px-5"
         >
           <div className="flex min-w-0 items-center gap-3">

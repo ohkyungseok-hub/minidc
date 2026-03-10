@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { PostListItem } from "@/types";
+import { getPostUrl } from "@/lib/utils";
 
 type PostFeedTableProps = {
   posts: PostListItem[];
@@ -61,7 +62,7 @@ export default function PostFeedTable({
               </div>
               <div className="min-w-0">
                 <Link
-                  href={`/posts/${post.id}`}
+                  href={getPostUrl(post.id, post.title)}
                   className="block truncate text-sm font-semibold text-slate-900 transition hover:text-[var(--primary-ink)] md:text-[15px]"
                 >
                   <span className="truncate">{post.title}</span>

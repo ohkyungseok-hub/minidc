@@ -57,6 +57,7 @@ type AdminPostRow = {
   down_count: number | null;
   view_count: number | null;
   images: string[];
+  topic: "work" | "relationship" | "family" | "anxiety" | "loneliness" | "money" | null;
   created_at: string;
   updated_at: string | null;
   author:
@@ -154,6 +155,7 @@ const adminPostSelect = `
   up_count,
   down_count,
   view_count,
+  topic,
   created_at,
   updated_at,
   author:users!posts_author_id_fkey (
@@ -264,6 +266,7 @@ function toAdminPostItem(row: AdminPostRow): AdminPostListItem {
     down_count: row.down_count ?? 0,
     view_count: row.view_count ?? 0,
     images: row.images ?? [],
+    topic: row.topic ?? null,
     created_at: row.created_at,
     updated_at: row.updated_at,
     author: author

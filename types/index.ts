@@ -73,6 +73,15 @@ export type AdminReportListItem = Report & {
   target_post?: Pick<Post, "id" | "title" | "author_id"> | null;
   target_comment?: Pick<Comment, "id" | "body" | "author_id" | "post_id"> | null;
 };
+export type TopicValue =
+  | "work"
+  | "relationship"
+  | "family"
+  | "anxiety"
+  | "loneliness"
+  | "money"
+  | "";
+
 export type PostFormValues = {
   boardId: string;
   title: string;
@@ -80,4 +89,5 @@ export type PostFormValues = {
   isAnonymous: boolean;
   isNotice: boolean;
   images: string[];
+  topic: TopicValue;
 };

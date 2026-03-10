@@ -6,7 +6,7 @@ import SectionTitle from "@/components/common/SectionTitle";
 import PostFeedTable from "@/components/posts/PostFeedTable";
 import { buildMetadata, SITE_NAME } from "@/config/seo";
 import { TOPICS, isValidTopicSlug } from "@/config/topics";
-import { getPopularPosts } from "@/lib/posts";
+import { getPostsByTopic, getPopularPosts } from "@/lib/posts";
 
 type TopicPageProps = {
   params: Promise<{ topic: string }>;
@@ -41,20 +41,40 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
   const t = TOPICS[topic];
 
-  // TODO: getPopularPosts를 topic 키워드 필터링으로 교체 필요
-  // 현재는 전체 인기글을 보여줍니다. posts 테이블에 topic 컬럼 추가 후 개선 예정.
-  const posts = await getPopularPosts({ limit: 20 });
+  // topic 컬럼으로 필터링. topic이 지정되지 않은 글은 getPopularPosts로 보완.
+  const topicResult = await getPostsByTopic(topic, { limit: 20 });
+  const posts = topicResult.totalCount > 0
+    ? topicResult.items
+    : (await getPopularPosts({ limit: 10 }));
 
   const relatedTopics = t.relatedTopics.map((slug) => TOPICS[slug]);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://blackpearls.kr";
+
+  // FAQPage JSON-LD
+  const faqJsonLd = t.faqs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: t.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
 
   // BreadcrumbList JSON-LD
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "홈", item: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://blackpearls.kr"}/` },
-      { "@type": "ListItem", position: 2, name: "고민 주제", item: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://blackpearls.kr"}/topics` },
-      { "@type": "ListItem", position: 3, name: t.label, item: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://blackpearls.kr"}/topics/${topic}` },
+      { "@type": "ListItem", position: 1, name: "홈", item: `${siteUrl}/` },
+      { "@type": "ListItem", position: 2, name: "고민 주제", item: `${siteUrl}/topics` },
+      { "@type": "ListItem", position: 3, name: t.label, item: `${siteUrl}/topics/${topic}` },
     ],
   };
 
@@ -64,6 +84,12 @@ export default async function TopicPage({ params }: TopicPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       <div className="space-y-8">
         {/* Breadcrumb */}
@@ -128,8 +154,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
             eyebrow="Popular"
             title="많이 공감받은 이야기"
             description={
-              // TODO: 주제 필터 적용 후 문구 수정 필요
-              "블랙펄즈에서 공감과 위로를 많이 받은 이야기들입니다."
+              topicResult.totalCount > 0
+                ? `${t.label} 주제로 분류된 글 ${topicResult.totalCount}개 중 추천 순`
+                : "블랙펄즈에서 공감과 위로를 많이 받은 이야기들입니다."
             }
             action={
               <Link
@@ -185,6 +212,29 @@ export default async function TopicPage({ params }: TopicPageProps) {
                     <p className="text-xs text-slate-500 line-clamp-1">{rt.description}</p>
                   </div>
                 </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* FAQ 섹션 — People Also Ask / FAQPage JSON-LD */}
+        {t.faqs.length > 0 && (
+          <section className="space-y-3">
+            <h2 className="text-sm font-bold tracking-[0.14em] text-slate-700">
+              자주 묻는 질문
+            </h2>
+            <div className="divide-y divide-[var(--line)] overflow-hidden rounded-2xl border border-[var(--line)] bg-white">
+              {t.faqs.map((faq, i) => (
+                <details key={i} className="group px-5 py-4">
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-slate-800 marker:hidden">
+                    <span className="mr-2 text-[var(--primary-ink)]">Q.</span>
+                    {faq.question}
+                  </summary>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    <span className="mr-2 font-bold text-slate-400">A.</span>
+                    {faq.answer}
+                  </p>
+                </details>
               ))}
             </div>
           </section>
