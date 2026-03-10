@@ -1,19 +1,33 @@
-import Link from "next/link";
-
-import PostFeedTable from "@/components/posts/PostFeedTable";
 import SectionTitle from "@/components/common/SectionTitle";
+import Pagination from "@/components/common/Pagination";
+import PageSizeSelect from "@/components/common/PageSizeSelect";
+import PostFeedTable from "@/components/posts/PostFeedTable";
 import { searchPosts } from "@/lib/posts";
 
+const VALID_PAGE_SIZES = [20, 50, 100] as const;
+
 type SearchPageProps = {
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; pageSize?: string }>;
 };
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { q, page: rawPage } = await searchParams;
+  const { q, page: rawPage, pageSize: rawSize } = await searchParams;
+
   const query = q?.trim() ?? "";
   const page = Math.max(Number(rawPage ?? 1) || 1, 1);
+  const pageSize = (VALID_PAGE_SIZES as readonly number[]).includes(Number(rawSize))
+    ? Number(rawSize)
+    : 20;
 
-  const result = query ? await searchPosts(query, page) : null;
+  const result = query ? await searchPosts(query, page, pageSize) : null;
+
+  function buildHref(p: number) {
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    if (pageSize !== 20) params.set("pageSize", String(pageSize));
+    params.set("page", String(p));
+    return `/search?${params.toString()}`;
+  }
 
   return (
     <div className="space-y-6">
@@ -29,46 +43,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       {result ? (
         <>
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-slate-500">
+              총 {result.totalCount}개 · {result.page}/{result.totalPages} 페이지
+            </p>
+            <PageSizeSelect value={pageSize} />
+          </div>
+
           <PostFeedTable
             posts={result.items}
             emptyMessage={`'${query}'에 해당하는 게시글이 없습니다.`}
           />
 
-          {result.totalPages > 1 ? (
-            <nav className="flex items-center justify-center gap-1">
-              {page > 1 ? (
-                <Link
-                  href={`/search?q=${encodeURIComponent(query)}&page=${page - 1}`}
-                  className="rounded-md border border-[var(--line)] bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[var(--primary-soft)]"
-                >
-                  이전
-                </Link>
-              ) : null}
-              {Array.from({ length: result.totalPages }, (_, i) => i + 1)
-                .filter((p) => Math.abs(p - page) <= 2)
-                .map((p) => (
-                  <Link
-                    key={p}
-                    href={`/search?q=${encodeURIComponent(query)}&page=${p}`}
-                    className={`rounded-md border px-3 py-2 text-sm font-semibold transition ${
-                      p === page
-                        ? "border-[var(--primary-strong)] bg-[var(--primary)] text-[var(--primary-ink)]"
-                        : "border-[var(--line)] bg-white text-slate-700 hover:bg-[var(--primary-soft)]"
-                    }`}
-                  >
-                    {p}
-                  </Link>
-                ))}
-              {page < result.totalPages ? (
-                <Link
-                  href={`/search?q=${encodeURIComponent(query)}&page=${page + 1}`}
-                  className="rounded-md border border-[var(--line)] bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[var(--primary-soft)]"
-                >
-                  다음
-                </Link>
-              ) : null}
-            </nav>
-          ) : null}
+          <Pagination
+            page={result.page}
+            totalPages={result.totalPages}
+            buildHref={buildHref}
+          />
         </>
       ) : null}
     </div>
