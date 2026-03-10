@@ -550,6 +550,49 @@ export async function getHotPosts(options: PopularPostsOptions = {}) {
   return getPopularPosts(options);
 }
 
+export async function searchPosts(query: string, page = 1, pageSize = 20): Promise<PaginatedList<PostListItem>> {
+  const supabase = await createSupabaseServer();
+  const trimmed = query.trim();
+  const empty = createPaginatedList([] as PostListItem[], page, pageSize, 0);
+
+  if (!trimmed) return empty;
+
+  if (!supabase) {
+    const filtered = mockPosts
+      .filter((p) =>
+        !p.is_hidden &&
+        (p.title.toLowerCase().includes(trimmed.toLowerCase()) ||
+          p.content.toLowerCase().includes(trimmed.toLowerCase())),
+      )
+      .map(getMockPostListItem);
+
+    const from = (page - 1) * pageSize;
+    return createPaginatedList(filtered.slice(from, from + pageSize), page, pageSize, filtered.length);
+  }
+
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  const filter = `title.ilike.%${trimmed}%,content.ilike.%${trimmed}%`;
+
+  const { data, count, error } = await supabase
+    .from("posts")
+    .select(boardPostFeedSelect, { count: "exact" })
+    .eq("is_hidden", false)
+    .eq("is_notice", false)
+    .or(filter)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (error || !data) return empty;
+
+  return createPaginatedList(
+    (data as SupabasePostFeedRow[]).map(toPostListItem),
+    page,
+    pageSize,
+    count ?? 0,
+  );
+}
+
 export async function getTodayPostCount() {
   const supabase = await createSupabaseServer();
 

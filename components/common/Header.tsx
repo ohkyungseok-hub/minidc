@@ -90,8 +90,8 @@ export default async function Header() {
 
             <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
               <SearchForm
-                action="/boards"
-                placeholder="고백, 위로, 해결책 게시판 검색"
+                action="/search"
+                placeholder="게시글 키워드 검색"
                 className="w-full min-w-0 xl:w-[360px]"
               />
               {user ? (
