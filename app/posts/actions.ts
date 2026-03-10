@@ -12,6 +12,7 @@ type PostFormInput = {
   title: string;
   content: string;
   isAnonymous: boolean;
+  images: string[];
 };
 
 function encodeMessage(message: string) {
@@ -24,6 +25,7 @@ function normalizeFormData(formData: FormData): PostFormInput {
     title: String(formData.get("title") ?? "").trim(),
     content: String(formData.get("content") ?? "").trim(),
     isAnonymous: formData.get("isAnonymous") === "on",
+    images: formData.getAll("images").map(String).filter(Boolean),
   };
 }
 
@@ -89,6 +91,7 @@ export async function createPostAction(formData: FormData) {
     isNotice: isAdminUser(user) ? requestedIsNotice : false,
     isAnonymous: input.isAnonymous,
     authorId: user.id,
+    images: input.images,
   });
 
   revalidatePostPages(post.board?.slug ?? board.slug, post.id);
@@ -132,6 +135,7 @@ export async function updatePostAction(postId: string, formData: FormData) {
     isNotice: isAdminUser(user) ? requestedIsNotice : currentPost.is_notice,
     isAnonymous: input.isAnonymous,
     authorId: user.id,
+    images: input.images,
   });
 
   revalidatePostPages(currentPost.board?.slug ?? null, postId);

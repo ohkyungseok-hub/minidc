@@ -56,6 +56,7 @@ type AdminPostRow = {
   up_count: number | null;
   down_count: number | null;
   view_count: number | null;
+  images: string[];
   created_at: string;
   updated_at: string | null;
   author:
@@ -262,6 +263,7 @@ function toAdminPostItem(row: AdminPostRow): AdminPostListItem {
     up_count: row.up_count ?? 0,
     down_count: row.down_count ?? 0,
     view_count: row.view_count ?? 0,
+    images: row.images ?? [],
     created_at: row.created_at,
     updated_at: row.updated_at,
     author: author

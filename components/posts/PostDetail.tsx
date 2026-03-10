@@ -45,6 +45,28 @@ export default function PostDetail({
       <p className="mt-6 whitespace-pre-wrap text-base leading-8 text-slate-700">
         {post.content}
       </p>
+
+      {post.images && post.images.length > 0 && (
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {post.images.map((url, i) => (
+            <a
+              key={i}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block overflow-hidden rounded-2xl border border-slate-200 bg-slate-100"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt={`첨부 이미지 ${i + 1}`}
+                className="h-48 w-full object-cover transition hover:opacity-90"
+              />
+            </a>
+          ))}
+        </div>
+      )}
+
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-6">
         <VoteButtons
           postId={post.id}

@@ -263,6 +263,7 @@ const boardPostFeedSelect = `
   up_count,
   down_count,
   view_count,
+  images,
   created_at,
   author:users!posts_author_id_fkey (
     id,
@@ -288,6 +289,7 @@ type SupabasePostDetailRow = {
   up_count: number | null;
   down_count: number | null;
   view_count: number | null;
+  images: string[];
   created_at: string;
   updated_at: string | null;
   author: { id: string; nickname: string; role: "user" | "admin"; level: number; warning_count: number; is_suspended: boolean; suspended_until: string | null; avatar_url: string | null; created_at: string; updated_at: string | null } | { id: string; nickname: string; role: "user" | "admin"; level: number; warning_count: number; is_suspended: boolean; suspended_until: string | null; avatar_url: string | null; created_at: string; updated_at: string | null }[] | null;
@@ -310,6 +312,7 @@ const postDetailSelect = `
   up_count,
   down_count,
   view_count,
+  images,
   created_at,
   updated_at,
   author:users!posts_author_id_fkey (
@@ -350,6 +353,7 @@ function toPost(record: SupabasePostDetailRow): Post {
     up_count: record.up_count ?? 0,
     down_count: record.down_count ?? 0,
     view_count: record.view_count ?? 0,
+    images: record.images ?? [],
     created_at: record.created_at,
     updated_at: record.updated_at,
     author: author
@@ -393,6 +397,7 @@ let mockPosts: Post[] = [
     up_count: 31,
     down_count: 1,
     view_count: 214,
+    images: [],
     created_at: "2026-03-09T12:00:00.000Z",
     updated_at: null,
     board: bySlug("confession"),
@@ -413,6 +418,7 @@ let mockPosts: Post[] = [
     up_count: 47,
     down_count: 2,
     view_count: 318,
+    images: [],
     created_at: "2026-03-09T13:30:00.000Z",
     updated_at: null,
     board: bySlug("comfort"),
@@ -433,6 +439,7 @@ let mockPosts: Post[] = [
     up_count: 23,
     down_count: 1,
     view_count: 181,
+    images: [],
     created_at: "2026-03-09T14:10:00.000Z",
     updated_at: null,
     board: bySlug("solutions"),
@@ -453,6 +460,7 @@ let mockPosts: Post[] = [
     up_count: 19,
     down_count: 0,
     view_count: 143,
+    images: [],
     created_at: "2026-03-09T15:00:00.000Z",
     updated_at: null,
     board: bySlug("confession"),
@@ -678,6 +686,7 @@ export async function createPost({
   isNotice = false,
   isAnonymous = false,
   authorId,
+  images = [],
 }: {
   boardId: string;
   title: string;
@@ -685,6 +694,7 @@ export async function createPost({
   isNotice?: boolean;
   isAnonymous?: boolean;
   authorId?: string;
+  images?: string[];
 }) {
   const supabase = await createSupabaseServer();
 
@@ -696,6 +706,7 @@ export async function createPost({
       content: content.trim(),
       is_notice: isNotice,
       is_anonymous: isAnonymous,
+      images,
     };
 
     const { data, error } = await supabase
@@ -730,6 +741,7 @@ export async function createPost({
     up_count: 0,
     down_count: 0,
     view_count: 0,
+    images: images ?? [],
     created_at: new Date().toISOString(),
     updated_at: null,
     board,
@@ -751,6 +763,7 @@ export async function updatePost(
     isNotice,
     isAnonymous,
     authorId,
+    images,
   }: {
     boardId?: string;
     title?: string;
@@ -758,6 +771,7 @@ export async function updatePost(
     isNotice?: boolean;
     isAnonymous?: boolean;
     authorId?: string;
+    images?: string[];
   },
 ) {
   const supabase = await createSupabaseServer();
@@ -789,6 +803,10 @@ export async function updatePost(
 
     if (typeof isAnonymous === "boolean") {
       payload.is_anonymous = isAnonymous;
+    }
+
+    if (images !== undefined) {
+      (payload as Record<string, unknown>).images = images;
     }
 
     const { data, error } = await supabase

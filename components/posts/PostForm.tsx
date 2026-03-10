@@ -3,6 +3,7 @@
 import { useDeferredValue, useState } from "react";
 import { useFormStatus } from "react-dom";
 
+import ImageUploader from "@/components/common/ImageUploader";
 import type { Board, PostFormValues } from "@/types";
 
 type PostFormProps = {
@@ -12,6 +13,7 @@ type PostFormProps = {
   submitLabel?: string;
   errorMessage?: string;
   canManageNotice?: boolean;
+  userId?: string;
 };
 
 const emptyValues: PostFormValues = {
@@ -20,6 +22,7 @@ const emptyValues: PostFormValues = {
   content: "",
   isAnonymous: false,
   isNotice: false,
+  images: [],
 };
 
 function SubmitButton({ label }: { label: string }) {
@@ -43,6 +46,7 @@ export default function PostForm({
   submitLabel = "저장",
   errorMessage,
   canManageNotice = false,
+  userId,
 }: PostFormProps) {
   const [values, setValues] = useState<PostFormValues>(defaultValues);
   const deferredContent = useDeferredValue(values.content);
@@ -107,6 +111,15 @@ export default function PostForm({
             className="w-full rounded-[1.5rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
           />
         </label>
+
+        {userId ? (
+          <ImageUploader
+            userId={userId}
+            defaultImages={values.images}
+            maxImages={5}
+          />
+        ) : null}
+
         <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
           <input
             name="isAnonymous"

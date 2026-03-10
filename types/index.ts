@@ -77,4 +77,5 @@ export type PostFormValues = {
   content: string;
   isAnonymous: boolean;
   isNotice: boolean;
+  images: string[];
 };

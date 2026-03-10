@@ -6,6 +6,23 @@ import { getSessionUser } from "@/lib/auth";
 import Nav from "./Nav";
 import SearchForm from "./SearchForm";
 
+function UserAvatar({ avatarUrl, nickname, size }: { avatarUrl: string | null; nickname: string; size: "sm" | "md" }) {
+  const cls = size === "sm" ? "h-5 w-5 text-[9px]" : "h-6 w-6 text-[10px]";
+
+  if (avatarUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={avatarUrl} alt={nickname} className={`${cls} rounded-full object-cover`} />
+    );
+  }
+
+  return (
+    <span className={`grid ${cls} place-items-center rounded-full bg-[var(--primary-ink)] font-black text-white`}>
+      {nickname[0]?.toUpperCase()}
+    </span>
+  );
+}
+
 export default async function Header() {
   const user = await getSessionUser();
 
@@ -30,9 +47,13 @@ export default async function Header() {
               </Link>
               {user ? (
                 <div className="flex items-center gap-2 xl:hidden">
-                  <div className="rounded-md border border-[var(--primary)] bg-[var(--primary-soft)] px-2.5 py-2 text-xs font-semibold text-[var(--primary-ink)]">
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-1.5 rounded-md border border-[var(--primary)] bg-[var(--primary-soft)] px-2 py-1.5 text-xs font-semibold text-[var(--primary-ink)] hover:bg-[var(--primary)]"
+                  >
+                    <UserAvatar avatarUrl={user.avatar_url} nickname={user.nickname} size="sm" />
                     {user.nickname}
-                  </div>
+                  </Link>
                   {user.role === "admin" ? (
                     <Link
                       href="/admin"
@@ -82,10 +103,14 @@ export default async function Header() {
               />
               {user ? (
                 <div className="hidden items-center gap-2 xl:flex">
-                  <div className="rounded-md border border-[var(--primary)] bg-[var(--primary-soft)] px-3 py-2 text-sm font-semibold text-[var(--primary-ink)]">
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 rounded-md border border-[var(--primary)] bg-[var(--primary-soft)] px-3 py-2 text-sm font-semibold text-[var(--primary-ink)] hover:bg-[var(--primary)]"
+                  >
+                    <UserAvatar avatarUrl={user.avatar_url} nickname={user.nickname} size="md" />
                     {user.nickname}
                     {user.role === "admin" ? " · 관리자" : ""}
-                  </div>
+                  </Link>
                   {user.role === "admin" ? (
                     <Link
                       href="/admin"

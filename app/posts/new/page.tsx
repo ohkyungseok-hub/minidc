@@ -30,12 +30,14 @@ export default async function NewPostPage({ searchParams }: NewPostPageProps) {
         submitLabel="게시글 저장"
         errorMessage={error}
         canManageNotice={isAdminUser(user)}
+        userId={user.id}
         defaultValues={{
           boardId: defaultBoardId ?? "",
           title: "",
           content: "",
           isAnonymous: false,
           isNotice: false,
+          images: [],
         }}
       />
     </div>

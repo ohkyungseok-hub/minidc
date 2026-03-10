@@ -49,10 +49,12 @@ export default async function EditPostPage({
           content: post.content,
           isAnonymous: post.is_anonymous,
           isNotice: post.is_notice,
+          images: post.images ?? [],
         }}
         submitLabel="수정 저장"
         errorMessage={error}
         canManageNotice={isAdminUser(user)}
+        userId={user.id}
       />
     </div>
   );

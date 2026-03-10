@@ -47,6 +47,7 @@ export type Database = {
         up_count: number;
         down_count: number;
         view_count: number;
+        images: string[];
         created_at: string;
         updated_at: string | null;
       }>;
