@@ -69,8 +69,12 @@ export async function recordPostVote(postId: string, direction: VoteDirection) {
     | { up_count: number; down_count: number; current_vote: -1 | 0 | 1 }[]
     | null;
 
-  if (error || !resultRows?.length) {
-    throw new Error("Failed to record vote");
+  if (error) {
+    throw new Error(error.message ?? "Failed to record vote");
+  }
+
+  if (!resultRows?.length) {
+    throw new Error("Failed to record vote: no result returned");
   }
 
   const result = resultRows[0];
