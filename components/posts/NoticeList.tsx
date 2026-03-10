@@ -28,7 +28,7 @@ export default function NoticeList({ posts }: NoticeListProps) {
             </span>
           </div>
           <span className="text-xs font-medium text-slate-500">
-            {post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}
+            {post.is_notice ? "관리자" : post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}
           </span>
         </Link>
       ))}

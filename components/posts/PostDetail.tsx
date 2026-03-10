@@ -35,7 +35,7 @@ export default function PostDetail({
           </>
         ) : null}
         <span>•</span>
-        <span>{post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}</span>
+        <span>{post.is_notice ? "관리자" : post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}</span>
         <span>•</span>
         <span>조회 {post.view_count}</span>
       </div>

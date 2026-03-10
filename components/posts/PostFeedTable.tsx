@@ -73,7 +73,7 @@ export default function PostFeedTable({
                 ) : null}
               </div>
               <div className="text-sm text-slate-600 md:text-center">
-                {post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}
+                {post.is_notice ? "관리자" : post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}
               </div>
               <div className="text-sm text-slate-500 md:text-center">
                 {formatPostDate(post.created_at)}
