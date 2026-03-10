@@ -53,6 +53,8 @@ export type AdminDashboardStats = {
   totalPosts: number;
   totalComments: number;
   pendingReports: number;
+  todayVisitors: number;
+  todayNewUsers: number;
 };
 export type AdminPostListItem = Omit<Post, "author" | "board"> & {
   author?: Pick<UserProfile, "id" | "nickname" | "role">;

@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
+
 import SectionTitle from "@/components/common/SectionTitle";
 import Pagination from "@/components/common/Pagination";
 import PageSizeSelect from "@/components/common/PageSizeSelect";
 import PostFeedTable from "@/components/posts/PostFeedTable";
 import { searchPosts } from "@/lib/posts";
+import { buildMetadata } from "@/config/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "게시글 검색",
+  description: "블랙펄즈 전체 게시판에서 키워드로 익명 고백 이야기를 검색할 수 있습니다.",
+  path: "/search",
+  noindex: true, // 검색결과 페이지는 색인 제외
+});
 
 const VALID_PAGE_SIZES = [20, 50, 100] as const;
 

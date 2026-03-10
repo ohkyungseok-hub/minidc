@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import BoardList from "@/components/boards/BoardList";
@@ -7,6 +8,15 @@ import NoticeList from "@/components/posts/NoticeList";
 import SectionTitle from "@/components/common/SectionTitle";
 import { getBoards } from "@/lib/boards";
 import { getFeaturedPosts, getNoticePosts, getPopularPosts, getTodayPostCount } from "@/lib/posts";
+import { buildMetadata, SITE_NAME } from "@/config/seo";
+import { TOPICS, TOPIC_SLUGS } from "@/config/topics";
+
+export const metadata: Metadata = buildMetadata({
+  title: `${SITE_NAME} | 익명 고백 커뮤니티, 위로와 공감을 나누는 공간`,
+  description:
+    "블랙펄즈는 남에게 말 못한 고민과 치부를 익명으로 털어놓고, 타인의 이야기에서 위로와 공감을 얻는 익명 커뮤니티입니다. 고백을 소비하지 않고 함께 견디며 때로는 해결책까지 모아가는 공간입니다.",
+  path: "/",
+});
 
 export default async function HomePage() {
   const [boards, noticePosts, featuredPosts, popularPosts, todayPostCount] = await Promise.all([
@@ -69,6 +79,38 @@ export default async function HomePage() {
           description="고백, 위로, 해결책 세 흐름으로 나누어 마음 상태에 맞는 공간을 찾을 수 있습니다."
         />
         <BoardList boards={boards} />
+      </section>
+
+      {/* 고민 주제 허브 — SEO 내부 링크 */}
+      <section className="space-y-4">
+        <SectionTitle
+          eyebrow="Topics"
+          title="고민 주제별 이야기"
+          description="직장, 연애, 가족, 불안, 외로움, 돈 문제. 내 마음에 가장 가까운 주제를 골라 이야기를 찾아보세요."
+          action={
+            <Link
+              href="/topics"
+              className="text-sm font-semibold text-[var(--primary-ink)] transition hover:text-slate-900"
+            >
+              전체 주제 보기
+            </Link>
+          }
+        />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {TOPIC_SLUGS.map((slug) => {
+            const t = TOPICS[slug];
+            return (
+              <Link
+                key={slug}
+                href={`/topics/${slug}`}
+                className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--line)] bg-white px-3 py-4 text-center transition hover:border-[var(--primary)] hover:bg-[var(--primary-soft)]"
+              >
+                <span className="text-2xl">{t.emoji}</span>
+                <span className="text-sm font-bold text-slate-800">{t.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
       <section className="space-y-4">

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ import PageSizeSelect from "@/components/common/PageSizeSelect";
 import PostFeedTable from "@/components/posts/PostFeedTable";
 import { getBoardBySlug, getBoards } from "@/lib/boards";
 import { getBoardPostFeedBySlug } from "@/lib/posts";
+import { buildMetadata } from "@/config/seo";
 
 const VALID_PAGE_SIZES = [20, 50, 100] as const;
 
@@ -16,6 +18,27 @@ type BoardDetailPageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string; q?: string; pageSize?: string }>;
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const board = await getBoardBySlug(slug);
+
+  if (!board) {
+    return { title: "게시판을 찾을 수 없습니다" };
+  }
+
+  return buildMetadata({
+    title: `${board.name} 게시판`,
+    description:
+      board.description ??
+      `블랙펄즈 ${board.name} 게시판. 익명으로 이야기를 나누고 공감과 위로를 받을 수 있습니다.`,
+    path: `/boards/${slug}`,
+  });
+}
 
 export default async function BoardDetailPage({
   params,

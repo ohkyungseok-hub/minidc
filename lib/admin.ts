@@ -426,26 +426,47 @@ export async function getAdminDashboardData(): Promise<{
         totalPosts: 0,
         totalComments: 0,
         pendingReports: 0,
+        todayVisitors: 0,
+        todayNewUsers: 0,
       },
       recentReports: [],
     };
   }
 
-  const [usersResponse, postsResponse, commentsResponse, reportsResponse, recentReportsResponse] =
-    await Promise.all([
-      supabase.from("users").select("id", { count: "exact", head: true }),
-      supabase.from("posts").select("id", { count: "exact", head: true }),
-      supabase.from("comments").select("id", { count: "exact", head: true }),
-      supabase
-        .from("reports")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "pending"),
-      supabase
-        .from("reports")
-        .select(adminReportSelect)
-        .order("created_at", { ascending: false })
-        .limit(DASHBOARD_REPORT_LIMIT),
-    ]);
+  const todayStart = new Date();
+  todayStart.setUTCHours(0, 0, 0, 0);
+  const todayStartISO = todayStart.toISOString();
+
+  const [
+    usersResponse,
+    postsResponse,
+    commentsResponse,
+    reportsResponse,
+    recentReportsResponse,
+    todayVisitorsResponse,
+    todayNewUsersResponse,
+  ] = await Promise.all([
+    supabase.from("users").select("id", { count: "exact", head: true }),
+    supabase.from("posts").select("id", { count: "exact", head: true }),
+    supabase.from("comments").select("id", { count: "exact", head: true }),
+    supabase
+      .from("reports")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending"),
+    supabase
+      .from("reports")
+      .select(adminReportSelect)
+      .order("created_at", { ascending: false })
+      .limit(DASHBOARD_REPORT_LIMIT),
+    supabase
+      .from("page_views")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", todayStartISO),
+    supabase
+      .from("users")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", todayStartISO),
+  ]);
 
   return {
     stats: {
@@ -453,6 +474,8 @@ export async function getAdminDashboardData(): Promise<{
       totalPosts: postsResponse.count ?? 0,
       totalComments: commentsResponse.count ?? 0,
       pendingReports: reportsResponse.count ?? 0,
+      todayVisitors: todayVisitorsResponse.count ?? 0,
+      todayNewUsers: todayNewUsersResponse.count ?? 0,
     },
     recentReports: (recentReportsResponse.data as DashboardReportRow[] | null)?.map(
       toAdminReportItem,

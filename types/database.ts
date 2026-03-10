@@ -10,6 +10,7 @@ type TableShape<Row> = {
   Row: Row;
   Insert: Partial<Row>;
   Update: Partial<Row>;
+  Relationships: [];
 };
 
 export type Database = {
@@ -26,6 +27,11 @@ export type Database = {
         avatar_url: string | null;
         created_at: string;
         updated_at: string | null;
+      }>;
+      page_views: TableShape<{
+        id: string;
+        user_id: string | null;
+        created_at: string;
       }>;
       boards: TableShape<{
         id: string;

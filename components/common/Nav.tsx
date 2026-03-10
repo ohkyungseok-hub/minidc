@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 const items = [
   { href: "/", label: "홈" },
   { href: "/boards", label: "게시판" },
+  { href: "/topics", label: "고민 주제" },
+  { href: "/best", label: "공감 글" },
   { href: "/hot", label: "인기" },
 ];
 

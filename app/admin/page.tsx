@@ -32,6 +32,8 @@ export default async function AdminDashboardPage({
     { label: "전체 게시글 수", value: stats.totalPosts },
     { label: "전체 댓글 수", value: stats.totalComments },
     { label: "미처리 신고 수", value: stats.pendingReports },
+    { label: "오늘 방문자 수", value: stats.todayVisitors },
+    { label: "오늘 신규 가입자", value: stats.todayNewUsers },
   ];
 
   return (
@@ -43,7 +45,7 @@ export default async function AdminDashboardPage({
         message={params.message}
       />
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {statCards.map((card) => (
           <article
             key={card.label}
