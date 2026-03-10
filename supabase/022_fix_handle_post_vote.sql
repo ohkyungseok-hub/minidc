@@ -77,9 +77,9 @@ begin
     values (p_post_id, v_user_id, p_next_vote::smallint);
 
     if p_next_vote = 1 then
-      update public.posts set up_count   = up_count   + 1 where id = p_post_id;
+      update public.posts set up_count   = posts.up_count   + 1 where id = p_post_id;
     else
-      update public.posts set down_count = down_count + 1 where id = p_post_id;
+      update public.posts set down_count = posts.down_count + 1 where id = p_post_id;
     end if;
 
     v_result_vote := p_next_vote;
@@ -90,9 +90,9 @@ begin
     where post_id = p_post_id and user_id = v_user_id;
 
     if p_next_vote = 1 then
-      update public.posts set up_count   = greatest(up_count   - 1, 0) where id = p_post_id;
+      update public.posts set up_count   = greatest(posts.up_count   - 1, 0) where id = p_post_id;
     else
-      update public.posts set down_count = greatest(down_count - 1, 0) where id = p_post_id;
+      update public.posts set down_count = greatest(posts.down_count - 1, 0) where id = p_post_id;
     end if;
 
     v_result_vote := 0;
@@ -105,13 +105,13 @@ begin
 
     if p_next_vote = 1 then
       update public.posts
-      set up_count   = up_count   + 1,
-          down_count = greatest(down_count - 1, 0)
+      set up_count   = posts.up_count   + 1,
+          down_count = greatest(posts.down_count - 1, 0)
       where id = p_post_id;
     else
       update public.posts
-      set up_count   = greatest(up_count   - 1, 0),
-          down_count = down_count + 1
+      set up_count   = greatest(posts.up_count   - 1, 0),
+          down_count = posts.down_count + 1
       where id = p_post_id;
     end if;
 
