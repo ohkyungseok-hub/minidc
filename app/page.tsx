@@ -6,14 +6,15 @@ import PostFeedTable from "@/components/posts/PostFeedTable";
 import NoticeList from "@/components/posts/NoticeList";
 import SectionTitle from "@/components/common/SectionTitle";
 import { getBoards } from "@/lib/boards";
-import { getFeaturedPosts, getNoticePosts, getPopularPosts } from "@/lib/posts";
+import { getFeaturedPosts, getNoticePosts, getPopularPosts, getTodayPostCount } from "@/lib/posts";
 
 export default async function HomePage() {
-  const [boards, noticePosts, featuredPosts, popularPosts] = await Promise.all([
+  const [boards, noticePosts, featuredPosts, popularPosts, todayPostCount] = await Promise.all([
     getBoards(),
     getNoticePosts(),
     getFeaturedPosts(),
     getPopularPosts(),
+    getTodayPostCount(),
   ]);
 
   return (
@@ -43,12 +44,8 @@ export default async function HomePage() {
         </div>
         <div className="grid gap-3">
           <div className="rounded-md border border-[var(--line)] bg-white p-4">
-            <p className="text-xs font-bold tracking-[0.18em] text-slate-500">게시판 수</p>
-            <p className="mt-2 text-3xl font-black text-slate-950">{boards.length}</p>
-          </div>
-          <div className="rounded-md border border-[var(--line)] bg-white p-4">
-            <p className="text-xs font-bold tracking-[0.18em] text-slate-500">최근 3일 인기글</p>
-            <p className="mt-2 text-3xl font-black text-slate-950">{popularPosts.length}</p>
+            <p className="text-xs font-bold tracking-[0.18em] text-slate-500">오늘 작성된 글</p>
+            <p className="mt-2 text-3xl font-black text-slate-950">{todayPostCount}</p>
           </div>
           <div className="rounded-md border border-[var(--line)] bg-[var(--sub-soft)] p-4 text-sm leading-6 text-slate-600">
             고해성사, 위로, 해결책 세 게시판을 중심으로 익명 고백과 공감, 조언이 모이는 구조입니다.

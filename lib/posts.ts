@@ -547,6 +547,30 @@ export async function getHotPosts(options: PopularPostsOptions = {}) {
   return getPopularPosts(options);
 }
 
+export async function getTodayPostCount() {
+  const supabase = await createSupabaseServer();
+
+  if (!supabase) {
+    return 0;
+  }
+
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const { count, error } = await supabase
+    .from("posts")
+    .select("id", { count: "exact", head: true })
+    .eq("is_notice", false)
+    .eq("is_hidden", false)
+    .gte("created_at", todayStart.toISOString());
+
+  if (error) {
+    return 0;
+  }
+
+  return count ?? 0;
+}
+
 export async function getPostsByBoardSlug(slug: string) {
   return mockPosts.filter((post) => post.board?.slug === slug && !post.is_notice && !post.is_hidden);
 }
