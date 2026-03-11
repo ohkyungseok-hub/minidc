@@ -8,6 +8,7 @@ import {
   updateUserRoleAction,
 } from "@/app/admin/actions";
 import { getAdminUsers } from "@/lib/admin";
+import DeleteUserButton from "@/components/admin/DeleteUserButton";
 
 type AdminUsersPageProps = {
   searchParams: Promise<{
@@ -178,6 +179,11 @@ export default async function AdminUsersPage({
                         }`}
                       />
                     </form>
+                    <DeleteUserButton
+                      userId={user.id}
+                      nickname={user.nickname}
+                      redirectTo={currentPath}
+                    />
                   </td>
                 </tr>
               ))}

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { requireAdminUser } from "@/lib/auth";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { createSupabaseAdmin } from "@/lib/supabase/admin-client";
 
 function encodeMessage(message: string) {
   return encodeURIComponent(message);
@@ -182,6 +183,36 @@ export async function toggleUserSuspensionAction(formData: FormData) {
       mode === "release" ? "회원 정지를 해제했습니다." : "회원을 7일 정지했습니다.",
     ),
   );
+}
+
+
+export async function deleteUserAction(formData: FormData) {
+  const target = String(formData.get("redirectTo") ?? "/admin/users");
+  const userId = String(formData.get("userId") ?? "");
+  const { admin } = await getAdminContext(target);
+
+  if (!userId) {
+    redirect(buildRedirect(target, "error", "사용자 ID가 없습니다."));
+  }
+
+  if (admin.id === userId) {
+    redirect(buildRedirect(target, "error", "자기 자신은 탈퇴 처리할 수 없습니다."));
+  }
+
+  const adminClient = createSupabaseAdmin();
+
+  if (!adminClient) {
+    redirect(buildRedirect(target, "error", "SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다."));
+  }
+
+  const { error } = await adminClient.auth.admin.deleteUser(userId);
+
+  if (error) {
+    redirect(buildRedirect(target, "error", `탈퇴 처리 실패: ${error.message}`));
+  }
+
+  revalidateAdminPaths();
+  redirect(buildRedirect(target, "message", "회원이 탈퇴 처리됐습니다."));
 }
 
 export async function togglePostHiddenAction(formData: FormData) {
