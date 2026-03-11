@@ -71,9 +71,13 @@ npm run dev
 `.env.local` 예시:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
+
+`SUPABASE_SERVICE_ROLE_KEY`는 서버 전용 값입니다. 현재 코드에서는 관리자 페이지의 `탈퇴 처리` 기능에 필요합니다.
 
 ## 5. 실행 명령어
 
@@ -96,6 +100,7 @@ npm run build
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-publishable-or-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 NEXT_PUBLIC_SITE_URL=https://your-production-domain
 ```
 

@@ -44,6 +44,9 @@ export default async function AdminUsersPage({
   const params = await searchParams;
   const users = await getAdminUsers(params.q);
   const currentPath = buildCurrentPath(params.q);
+  const canDeleteUsers = Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
 
   return (
     <div className="space-y-6">
@@ -71,6 +74,13 @@ export default async function AdminUsersPage({
           </button>
         </form>
       </section>
+
+      {!canDeleteUsers ? (
+        <section className="rounded-[1.75rem] border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+          `탈퇴 처리` 기능이 비활성화되어 있습니다. 서버 환경변수 `SUPABASE_SERVICE_ROLE_KEY`
+          를 설정하면 회원 삭제를 사용할 수 있습니다.
+        </section>
+      ) : null}
 
       <AdminTableCard>
         <div className="overflow-x-auto">
@@ -179,11 +189,17 @@ export default async function AdminUsersPage({
                         }`}
                       />
                     </form>
-                    <DeleteUserButton
-                      userId={user.id}
-                      nickname={user.nickname}
-                      redirectTo={currentPath}
-                    />
+                    {canDeleteUsers ? (
+                      <DeleteUserButton
+                        userId={user.id}
+                        nickname={user.nickname}
+                        redirectTo={currentPath}
+                      />
+                    ) : (
+                      <p className="mt-2 text-xs font-medium text-amber-700">
+                        탈퇴 처리 비활성화
+                      </p>
+                    )}
                   </td>
                 </tr>
               ))}
