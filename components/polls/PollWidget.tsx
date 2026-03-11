@@ -155,20 +155,28 @@ export default function PollWidget() {
           return (
             <li key={option.id}>
               {hasVoted ? (
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className={`font-semibold ${isSelected ? "text-[var(--primary-ink)]" : "text-slate-700"}`}>
+                <div
+                  className={`relative overflow-hidden rounded-xl border px-4 py-2.5 ${
+                    isSelected
+                      ? "border-[var(--primary)] bg-[var(--primary-soft)]"
+                      : "border-slate-200 bg-slate-50"
+                  }`}
+                >
+                  {/* fill bar */}
+                  <div
+                    className={`absolute inset-y-0 left-0 transition-all duration-700 ease-out ${
+                      isSelected ? "bg-[var(--primary)]/20" : "bg-slate-200/60"
+                    }`}
+                    style={{ width: `${option.percent}%` }}
+                  />
+                  {/* content */}
+                  <div className="relative flex items-center justify-between gap-2">
+                    <span className={`text-sm font-semibold ${isSelected ? "text-[var(--primary-ink)]" : "text-slate-700"}`}>
                       {isSelected && "✓ "}{option.label}
                     </span>
-                    <span className="text-xs font-bold text-slate-500">{option.percent}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        isSelected ? "bg-[var(--primary)]" : "bg-slate-300"
-                      }`}
-                      style={{ width: `${option.percent}%` }}
-                    />
+                    <span className={`shrink-0 text-sm font-bold tabular-nums ${isSelected ? "text-[var(--primary-ink)]" : "text-slate-500"}`}>
+                      {option.percent}%
+                    </span>
                   </div>
                 </div>
               ) : (
