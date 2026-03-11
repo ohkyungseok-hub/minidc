@@ -44,11 +44,19 @@ function setVotedPoll(pollId: string, optionId: string) {
   localStorage.setItem("bp_voted_polls", JSON.stringify(voted));
 }
 
+function clearVotedPoll(pollId: string) {
+  const voted = getVotedPolls();
+  delete voted[pollId];
+  localStorage.setItem("bp_voted_polls", JSON.stringify(voted));
+}
+
 export default function PollWidget() {
   const [poll, setPoll] = useState<Poll | null>(null);
   const [loading, setLoading] = useState(true);
   const [votedOptionId, setVotedOptionId] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+  const [showDone, setShowDone] = useState(false);
+  const [isRevoting, setIsRevoting] = useState(false);
 
   useEffect(() => {
     fetch("/api/polls")
@@ -66,8 +74,8 @@ export default function PollWidget() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleVote = async (optionId: string) => {
-    if (!poll || isPending || votedOptionId) return;
+  const submitVote = async (optionId: string, isChange: boolean) => {
+    if (!poll || isPending) return;
 
     setIsPending(true);
 
@@ -76,7 +84,7 @@ export default function PollWidget() {
       const response = await fetch("/api/polls/vote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pollId: poll.id, optionId, voterKey }),
+        body: JSON.stringify({ pollId: poll.id, optionId, voterKey, isChange }),
       });
 
       const data = (await response.json()) as {
@@ -89,6 +97,8 @@ export default function PollWidget() {
       if (data.ok && data.options) {
         setVotedOptionId(optionId);
         setVotedPoll(poll.id, optionId);
+        setIsRevoting(false);
+        setShowDone(true);
         setPoll((prev) => {
           if (!prev) return prev;
           return {
@@ -108,9 +118,22 @@ export default function PollWidget() {
     }
   };
 
+  const handleVote = (optionId: string) => {
+    if (votedOptionId && !isRevoting) return;
+    submitVote(optionId, isRevoting);
+  };
+
+  const handleRevote = () => {
+    if (!poll) return;
+    clearVotedPoll(poll.id);
+    setShowDone(false);
+    setIsRevoting(true);
+    setVotedOptionId(null);
+  };
+
   if (loading || !poll) return null;
 
-  const hasVoted = Boolean(votedOptionId);
+  const hasVoted = Boolean(votedOptionId) && !isRevoting;
 
   return (
     <section className="rounded-md border border-[var(--line)] bg-white p-5 space-y-4">
@@ -118,6 +141,12 @@ export default function PollWidget() {
         <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-400">익명 투표</p>
         <p className="mt-1 text-base font-bold text-slate-900">{poll.question}</p>
       </div>
+
+      {showDone && !isRevoting && (
+        <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm font-semibold text-emerald-700">
+          ✓ 투표 참여가 완료되었습니다
+        </div>
+      )}
 
       <ul className="space-y-2">
         {poll.options.map((option) => {
@@ -157,7 +186,18 @@ export default function PollWidget() {
         })}
       </ul>
 
-      <p className="text-xs text-slate-400">총 {poll.totalVotes.toLocaleString()}명 참여 · 익명 투표</p>
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-slate-400">총 {poll.totalVotes.toLocaleString()}명 참여 · 익명 투표</p>
+        {hasVoted && (
+          <button
+            type="button"
+            onClick={handleRevote}
+            className="text-xs font-semibold text-slate-400 underline underline-offset-2 hover:text-slate-600"
+          >
+            재투표
+          </button>
+        )}
+      </div>
     </section>
   );
 }

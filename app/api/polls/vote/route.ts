@@ -6,6 +6,7 @@ type VoteBody = {
   pollId?: string;
   optionId?: string;
   voterKey?: string;
+  isChange?: boolean;
 };
 
 export async function POST(request: Request) {
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
         p_poll_id: body.pollId,
         p_option_id: body.optionId,
         p_voter_key: body.voterKey,
+        p_is_change: body.isChange ?? false,
       } as never,
     );
 
