@@ -5,12 +5,15 @@ import type { Post, PostVoteState } from "@/types";
 import { getPostUrl } from "@/lib/utils";
 
 import VoteButtons from "./VoteButtons";
+import EmpathyButton from "./EmpathyButton";
 
 type PostDetailProps = {
   post: Post;
   canManage?: boolean;
   currentUserId?: string;
   voteState?: PostVoteState;
+  empathyCount?: number;
+  hasEmpathized?: boolean;
 };
 
 export default function PostDetail({
@@ -18,6 +21,8 @@ export default function PostDetail({
   canManage = false,
   currentUserId,
   voteState,
+  empathyCount = 0,
+  hasEmpathized = false,
 }: PostDetailProps) {
   return (
     <article className="rounded-[2rem] border border-black/10 bg-white/90 p-8 shadow-sm">
@@ -71,14 +76,23 @@ export default function PostDetail({
       )}
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-6">
-        <VoteButtons
-          postId={post.id}
-          initialUpCount={voteState?.upCount ?? post.up_count}
-          initialDownCount={voteState?.downCount ?? post.down_count}
-          initialVote={voteState?.currentVote ?? 0}
-          isAuthenticated={Boolean(currentUserId)}
-          loginHref={`/login?next=${encodeURIComponent(getPostUrl(post.id, post.title))}`}
-        />
+        <div className="flex flex-wrap items-center gap-3">
+          <VoteButtons
+            postId={post.id}
+            initialUpCount={voteState?.upCount ?? post.up_count}
+            initialDownCount={voteState?.downCount ?? post.down_count}
+            initialVote={voteState?.currentVote ?? 0}
+            isAuthenticated={Boolean(currentUserId)}
+            loginHref={`/login?next=${encodeURIComponent(getPostUrl(post.id, post.title))}`}
+          />
+          <EmpathyButton
+            postId={post.id}
+            initialCount={empathyCount}
+            initialHasEmpathized={hasEmpathized}
+            isAuthenticated={Boolean(currentUserId)}
+            loginHref={`/login?next=${encodeURIComponent(getPostUrl(post.id, post.title))}`}
+          />
+        </div>
         {canManage ? (
           <div className="flex flex-wrap items-center gap-3">
             <Link

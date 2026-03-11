@@ -8,7 +8,7 @@ import PostDetail from "@/components/posts/PostDetail";
 import { getSessionUser } from "@/lib/auth";
 import { getCommentsByPostId } from "@/lib/comments";
 import { getPostById, getPopularPosts } from "@/lib/posts";
-import { getPostVoteState } from "@/lib/votes";
+import { getPostVoteState, getEmpathyState } from "@/lib/votes";
 import { buildPostMetadata, SITE_URL } from "@/config/seo";
 import { extractPostId, getPostUrl } from "@/lib/utils";
 
@@ -49,10 +49,11 @@ export default async function PostDetailPage({
   // getSessionUser is React-cached; calling it first lets the 3 heavier
   // DB queries start in parallel while auth resolves concurrently.
   const currentUser = await getSessionUser();
-  const [post, comments, voteState, relatedPosts] = await Promise.all([
+  const [post, comments, voteState, empathyState, relatedPosts] = await Promise.all([
     getPostById(postId),
     getCommentsByPostId(postId),
     getPostVoteState(postId, currentUser?.id),
+    getEmpathyState(postId, currentUser?.id),
     getPopularPosts({ limit: 5 }),
   ]);
 
@@ -115,6 +116,8 @@ export default async function PostDetailPage({
           canManage={currentUser?.id === post.author_id}
           currentUserId={currentUser?.id}
           voteState={voteState}
+          empathyCount={empathyState.empathyCount}
+          hasEmpathized={empathyState.hasEmpathized}
         />
 
         {/* 관련 글 — 내부 링크 */}

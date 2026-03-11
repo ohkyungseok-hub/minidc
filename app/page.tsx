@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import BoardList from "@/components/boards/BoardList";
+import PollWidget from "@/components/polls/PollWidget";
 import PostList from "@/components/posts/PostList";
 import PostFeedTable from "@/components/posts/PostFeedTable";
 import NoticeList from "@/components/posts/NoticeList";
@@ -60,6 +61,7 @@ export default async function HomePage() {
           <div className="rounded-md border border-[var(--line)] bg-[var(--sub-soft)] p-4 text-sm leading-6 text-slate-600">
             고해성사, 위로, 해결책 세 게시판을 중심으로 익명 고백과 공감, 조언이 모이는 구조입니다.
           </div>
+          <PollWidget />
         </div>
       </section>
 

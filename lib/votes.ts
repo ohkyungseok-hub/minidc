@@ -1,6 +1,11 @@
 import { createSupabaseServer } from "@/lib/supabase/server";
 import type { Post, PostVoteState, VoteDirection } from "@/types";
 
+export type EmpathyState = {
+  empathyCount: number;
+  hasEmpathized: boolean;
+};
+
 export function getScore(
   entity: Pick<Post, "up_count" | "down_count"> | { up_count: number; down_count: number },
 ) {
@@ -49,6 +54,38 @@ export async function getPostVoteState(
     upCount: post?.up_count ?? 0,
     downCount: post?.down_count ?? 0,
   };
+}
+
+export async function getEmpathyState(
+  postId: string,
+  userId?: string,
+): Promise<EmpathyState> {
+  const supabase = await createSupabaseServer();
+
+  if (!supabase) {
+    return { empathyCount: 0, hasEmpathized: false };
+  }
+
+  const postQuery = supabase
+    .from("posts")
+    .select("empathy_count")
+    .eq("id", postId)
+    .maybeSingle();
+  const { data: postData } = await postQuery;
+  const empathyCount = (postData as { empathy_count?: number } | null)?.empathy_count ?? 0;
+  let hasEmpathized = false;
+
+  if (userId) {
+    const { data } = await supabase
+      .from("post_empathies" as never)
+      .select("post_id")
+      .eq("post_id", postId)
+      .eq("user_id", userId)
+      .maybeSingle();
+    hasEmpathized = Boolean(data);
+  }
+
+  return { empathyCount, hasEmpathized };
 }
 
 export async function recordPostVote(postId: string, direction: VoteDirection) {

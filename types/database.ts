@@ -52,6 +52,7 @@ export type Database = {
         hidden_reason: string | null;
         up_count: number;
         down_count: number;
+        empathy_count: number;
         view_count: number;
         images: string[];
         topic: "work" | "relationship" | "family" | "anxiety" | "loneliness" | "money" | null;

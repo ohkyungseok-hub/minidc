@@ -34,6 +34,7 @@ function revalidateAdminPaths(paths: string[] = []) {
   revalidatePath("/admin/posts");
   revalidatePath("/admin/comments");
   revalidatePath("/admin/reports");
+  revalidatePath("/admin/polls");
   revalidatePath("/");
   revalidatePath("/boards");
   revalidatePath("/hot");
@@ -415,6 +416,100 @@ export async function deleteReportTargetAction(formData: FormData) {
 
   revalidateAdminPaths();
   redirect(buildRedirect(target, "message", "신고 대상을 삭제하고 신고를 처리완료로 변경했습니다."));
+}
+
+export async function createPollAction(formData: FormData) {
+  const target = "/admin/polls";
+  const question = String(formData.get("question") ?? "").trim();
+  const { supabase } = await getAdminContext(target);
+
+  if (!question) {
+    redirect(buildRedirect(target, "error", "투표 질문을 입력해주세요."));
+  }
+
+  const optionLabels: string[] = [];
+
+  for (let i = 0; i < 10; i++) {
+    const label = String(formData.get(`option_${i}`) ?? "").trim();
+    if (label) optionLabels.push(label);
+  }
+
+  if (optionLabels.length < 2) {
+    redirect(buildRedirect(target, "error", "선택지를 최소 2개 입력해주세요."));
+  }
+
+  const { data: poll, error: pollError } = await supabase
+    .from("polls" as never)
+    .insert({ question } as never)
+    .select("id")
+    .single();
+
+  if (pollError || !poll) {
+    redirect(buildRedirect(target, "error", "투표를 생성하지 못했습니다."));
+  }
+
+  const pollId = (poll as { id: string }).id;
+  const optionRows = optionLabels.map((label, i) => ({
+    poll_id: pollId,
+    label,
+    sort_order: i,
+  }));
+
+  const { error: optError } = await supabase
+    .from("poll_options" as never)
+    .insert(optionRows as never);
+
+  if (optError) {
+    redirect(buildRedirect(target, "error", "선택지를 저장하지 못했습니다."));
+  }
+
+  revalidateAdminPaths();
+  redirect(buildRedirect(target, "message", "투표가 생성됐습니다."));
+}
+
+export async function togglePollActiveAction(formData: FormData) {
+  const target = "/admin/polls";
+  const pollId = String(formData.get("pollId") ?? "");
+  const isActive = formData.get("isActive") === "true";
+  const { supabase } = await getAdminContext(target);
+
+  if (!pollId) {
+    redirect(buildRedirect(target, "error", "투표를 찾지 못했습니다."));
+  }
+
+  const { error } = await supabase
+    .from("polls" as never)
+    .update({ is_active: !isActive } as never)
+    .eq("id", pollId);
+
+  if (error) {
+    redirect(buildRedirect(target, "error", "투표 상태를 변경하지 못했습니다."));
+  }
+
+  revalidateAdminPaths();
+  redirect(buildRedirect(target, "message", isActive ? "투표를 비활성화했습니다." : "투표를 활성화했습니다."));
+}
+
+export async function deletePollAction(formData: FormData) {
+  const target = "/admin/polls";
+  const pollId = String(formData.get("pollId") ?? "");
+  const { supabase } = await getAdminContext(target);
+
+  if (!pollId) {
+    redirect(buildRedirect(target, "error", "투표를 찾지 못했습니다."));
+  }
+
+  const { error } = await supabase
+    .from("polls" as never)
+    .delete()
+    .eq("id", pollId);
+
+  if (error) {
+    redirect(buildRedirect(target, "error", "투표를 삭제하지 못했습니다."));
+  }
+
+  revalidateAdminPaths();
+  redirect(buildRedirect(target, "message", "투표를 삭제했습니다."));
 }
 
 export async function suspendReportAuthorAction(formData: FormData) {

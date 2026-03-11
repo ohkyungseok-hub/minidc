@@ -9,6 +9,7 @@ const adminNavItems = [
   { href: "/admin/posts", label: "게시글 관리" },
   { href: "/admin/comments", label: "댓글 관리" },
   { href: "/admin/reports", label: "신고 관리" },
+  { href: "/admin/polls", label: "투표 관리" },
 ];
 
 export default function AdminSidebar() {

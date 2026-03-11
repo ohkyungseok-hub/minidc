@@ -266,6 +266,7 @@ function toAdminPostItem(row: AdminPostRow): AdminPostListItem {
     hidden_reason: row.hidden_reason,
     up_count: row.up_count ?? 0,
     down_count: row.down_count ?? 0,
+    empathy_count: (row as { empathy_count?: number }).empathy_count ?? 0,
     view_count: row.view_count ?? 0,
     images: row.images ?? [],
     topic: row.topic ?? null,
