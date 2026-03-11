@@ -32,8 +32,10 @@ returns table (empathy_count integer, has_empathized boolean)
 language plpgsql security definer set search_path = public
 as $$
 declare
-  v_user_id uuid := auth.uid();
-  v_exists  boolean;
+  v_user_id    uuid := auth.uid();
+  v_exists     boolean;
+  v_new_count  integer;
+  v_empathized boolean;
 begin
   if v_user_id is null then
     raise exception 'Authentication required';
@@ -47,19 +49,23 @@ begin
   if v_exists then
     delete from post_empathies
     where post_id = p_post_id and user_id = v_user_id;
-    update posts set empathy_count = greatest(empathy_count - 1, 0)
+    update posts
+    set empathy_count = greatest(empathy_count - 1, 0)
     where id = p_post_id;
-    return query
-      select posts.empathy_count, false
-      from posts where id = p_post_id;
+    v_empathized := false;
   else
     insert into post_empathies (post_id, user_id) values (p_post_id, v_user_id);
-    update posts set empathy_count = empathy_count + 1
+    update posts
+    set empathy_count = empathy_count + 1
     where id = p_post_id;
-    return query
-      select posts.empathy_count, true
-      from posts where id = p_post_id;
+    v_empathized := true;
   end if;
+
+  -- Use table alias to disambiguate from the function's return column
+  select p.empathy_count into v_new_count
+  from posts p where p.id = p_post_id;
+
+  return query select v_new_count, v_empathized;
 end;
 $$;
 
