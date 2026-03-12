@@ -83,6 +83,35 @@ export default async function HomePage() {
         <BoardList boards={boards} />
       </section>
 
+      <section className="space-y-4">
+        <SectionTitle
+          eyebrow="Popular"
+          title="인기글 TOP 10"
+          description="최근 3일 동안 많은 공감과 반응을 얻은 이야기들을 모아 봅니다."
+          action={(
+            <Link
+              href="/hot"
+              className="text-sm font-semibold text-[var(--primary-ink)] transition hover:text-slate-900"
+            >
+              전체 보기
+            </Link>
+          )}
+        />
+        <PostFeedTable
+          posts={popularPosts}
+          emptyMessage="최근 3일 내 집계할 인기글이 없습니다."
+        />
+      </section>
+
+      <section className="space-y-4">
+        <SectionTitle
+          eyebrow="Featured"
+          title="최근 등록된 이야기"
+          description="방금 올라온 글과 최근 등록된 이야기를 먼저 살펴볼 수 있습니다."
+        />
+        <PostList posts={featuredPosts} emptyMessage="아직 노출할 게시글이 없습니다." />
+      </section>
+
       {/* 고민 주제 허브 — SEO 내부 링크 */}
       <section className="space-y-4">
         <SectionTitle
@@ -113,35 +142,6 @@ export default async function HomePage() {
             );
           })}
         </div>
-      </section>
-
-      <section className="space-y-4">
-        <SectionTitle
-          eyebrow="Popular"
-          title="인기글 TOP 10"
-          description="최근 3일 동안 많은 공감과 반응을 얻은 이야기들을 모아 봅니다."
-          action={(
-            <Link
-              href="/hot"
-              className="text-sm font-semibold text-[var(--primary-ink)] transition hover:text-slate-900"
-            >
-              전체 보기
-            </Link>
-          )}
-        />
-        <PostFeedTable
-          posts={popularPosts}
-          emptyMessage="최근 3일 내 집계할 인기글이 없습니다."
-        />
-      </section>
-
-      <section className="space-y-4">
-        <SectionTitle
-          eyebrow="Featured"
-          title="지금 많이 읽히는 이야기"
-          description="최근 올라온 글 중 공감과 반응이 빠르게 모이는 이야기입니다."
-        />
-        <PostList posts={featuredPosts} emptyMessage="아직 노출할 게시글이 없습니다." />
       </section>
     </div>
   );

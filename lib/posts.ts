@@ -718,7 +718,7 @@ export async function getFeaturedPosts() {
     return mockPosts
       .filter((post) => !post.is_notice && !post.is_hidden)
       .sort((left, right) => right.created_at.localeCompare(left.created_at))
-      .slice(0, 3);
+      .slice(0, 10);
   }
 
   const { data, error } = await supabase
@@ -727,7 +727,7 @@ export async function getFeaturedPosts() {
     .eq("is_notice", false)
     .eq("is_hidden", false)
     .order("created_at", { ascending: false })
-    .limit(3);
+    .limit(10);
 
   if (error || !data) {
     return [];
