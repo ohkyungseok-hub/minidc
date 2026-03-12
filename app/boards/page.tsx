@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import BoardTabs from "@/components/boards/BoardTabs";
 import SearchForm from "@/components/common/SearchForm";
 import SectionTitle from "@/components/common/SectionTitle";
