@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 
-import { getSiteUrl } from "@/lib/site-url";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { createSupabaseAdmin } from "@/lib/supabase/admin-client";
 
 function normalizeNextPath(value: FormDataEntryValue | null) {
   const next = typeof value === "string" ? value : "/";
@@ -79,33 +79,53 @@ export async function signUp(formData: FormData) {
     });
   }
 
-  const siteUrl = getSiteUrl();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}`,
-      data: {
-        nickname,
-      },
-    },
-  });
-
-  if (error) {
+  // admin client로 이메일 인증 없이 바로 계정 생성
+  const admin = createSupabaseAdmin();
+  if (!admin) {
     authRedirect("/signup", {
-      error: error.message,
+      error: "서버 설정 오류가 발생했습니다.",
       next,
     });
   }
 
-  if (data.session) {
-    redirect(next);
+  const { data: created, error: createError } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: { nickname },
+  });
+
+  if (createError) {
+    authRedirect("/signup", {
+      error: createError.message,
+      next,
+    });
   }
 
-  authRedirect("/login", {
-    message: "회원가입이 완료되었습니다. 이메일 인증 후 로그인하세요.",
-    next,
-  });
+  if (!created.user) {
+    authRedirect("/signup", {
+      error: "회원가입 중 오류가 발생했습니다.",
+      next,
+    });
+  }
+
+  // users 테이블에 nickname 저장 (트리거가 없는 경우 대비)
+  await admin.from("users" as never).upsert({
+    id: created.user.id,
+    nickname,
+  } as never, { onConflict: "id", ignoreDuplicates: true });
+
+  // 생성 즉시 로그인
+  const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (signInError) {
+    authRedirect("/login", {
+      message: "회원가입이 완료되었습니다. 로그인해주세요.",
+      next,
+    });
+  }
+
+  redirect(next);
 }
 
 export async function signIn(formData: FormData) {
