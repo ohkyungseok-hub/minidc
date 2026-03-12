@@ -1,3 +1,5 @@
+import { unstable_noStore as noStore } from "next/cache";
+
 import { mockBoards } from "@/lib/boards";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import type { Board, PaginatedList, Post, PostListItem, UserProfile } from "@/types";
@@ -712,6 +714,7 @@ let mockPosts: Post[] = [
 ];
 
 export async function getFeaturedPosts() {
+  noStore();
   const supabase = await createSupabaseServer();
 
   if (!supabase) {
