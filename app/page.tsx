@@ -12,6 +12,8 @@ import { getFeaturedPosts, getNoticePosts, getPopularPosts, getTodayPostCount } 
 import { buildMetadata, SITE_NAME } from "@/config/seo";
 import { TOPICS, TOPIC_SLUGS } from "@/config/topics";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = buildMetadata({
   title: `${SITE_NAME} | 익명 고백 커뮤니티, 위로와 공감을 나누는 공간`,
   description:
