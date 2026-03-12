@@ -312,7 +312,6 @@ const postDetailSelect = `
   hidden_reason,
   up_count,
   down_count,
-  empathy_count,
   view_count,
   images,
   topic,
