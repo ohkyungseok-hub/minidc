@@ -713,7 +713,7 @@ let mockPosts: Post[] = [
   },
 ];
 
-export async function getFeaturedPosts() {
+export async function getFeaturedPosts(): Promise<PostListItem[]> {
   noStore();
   const supabase = await createSupabaseServer();
 
@@ -721,12 +721,13 @@ export async function getFeaturedPosts() {
     return mockPosts
       .filter((post) => !post.is_notice && !post.is_hidden)
       .sort((left, right) => right.created_at.localeCompare(left.created_at))
-      .slice(0, 10);
+      .slice(0, 10)
+      .map(getMockPostListItem);
   }
 
   const { data, error } = await supabase
     .from("posts")
-    .select(postDetailSelect)
+    .select(boardPostFeedSelect)
     .eq("is_notice", false)
     .eq("is_hidden", false)
     .order("created_at", { ascending: false })
@@ -736,7 +737,7 @@ export async function getFeaturedPosts() {
     return [];
   }
 
-  return (data as SupabasePostDetailRow[]).map(toPost);
+  return (data as SupabasePostFeedRow[]).map(toPostListItem);
 }
 
 export async function getNoticePosts(): Promise<PostListItem[]> {

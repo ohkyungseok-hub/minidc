@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import BoardList from "@/components/boards/BoardList";
 import PollWidget from "@/components/polls/PollWidget";
-import PostList from "@/components/posts/PostList";
 import PostFeedTable from "@/components/posts/PostFeedTable";
 import NoticeList from "@/components/posts/NoticeList";
 import SectionTitle from "@/components/common/SectionTitle";
@@ -111,7 +110,7 @@ export default async function HomePage() {
           title="최근 등록된 이야기"
           description="방금 올라온 글과 최근 등록된 이야기를 먼저 살펴볼 수 있습니다."
         />
-        <PostList posts={featuredPosts} emptyMessage="아직 노출할 게시글이 없습니다." />
+        <PostFeedTable posts={featuredPosts} emptyMessage="아직 노출할 게시글이 없습니다." />
       </section>
 
       {/* 고민 주제 허브 — SEO 내부 링크 */}
