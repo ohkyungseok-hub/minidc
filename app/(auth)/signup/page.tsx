@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 import { signUp } from "@/app/(auth)/actions";
+import FormStatusButton from "@/components/common/FormStatusButton";
 import SectionTitle from "@/components/common/SectionTitle";
 import { getSessionUser } from "@/lib/auth";
 
@@ -73,12 +74,11 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-[var(--primary-strong)]"
             />
           </label>
-          <button
-            type="submit"
-            className="w-full rounded-2xl bg-[var(--primary)] px-4 py-3 font-semibold text-[var(--primary-ink)]"
-          >
-            회원가입
-          </button>
+          <FormStatusButton
+            label="회원가입"
+            pendingLabel="가입 중..."
+            className="w-full rounded-2xl bg-[var(--primary)] px-4 py-3 font-semibold text-[var(--primary-ink)] disabled:opacity-60"
+          />
         </form>
         <p className="mt-5 text-sm text-slate-500">
           이미 계정이 있으면{" "}
