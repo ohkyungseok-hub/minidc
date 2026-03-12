@@ -10,11 +10,23 @@ type PostFeedTableProps = {
 };
 
 function formatPostDate(value: string) {
+  const d = new Date(value);
+  const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+  const kst = new Date(d.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+
+  const diffMs = now.getTime() - kst.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+
+  if (diffMin < 1) return "방금 전";
+  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffMin < 60 * 24) return `${Math.floor(diffMin / 60)}시간 전`;
+
   return new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(new Date(value));
+  }).format(d);
 }
 
 export default function PostFeedTable({
