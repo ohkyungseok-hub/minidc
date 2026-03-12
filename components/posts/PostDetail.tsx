@@ -7,6 +7,17 @@ import { getPostUrl } from "@/lib/utils";
 import VoteButtons from "./VoteButtons";
 import EmpathyButton from "./EmpathyButton";
 
+function formatDetailDate(value: string) {
+  return new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
 type PostDetailProps = {
   post: Post;
   canManage?: boolean;
@@ -44,6 +55,8 @@ export default function PostDetail({
         <span>{post.is_notice ? "관리자" : post.is_anonymous ? "익명" : post.author?.nickname ?? "anonymous"}</span>
         <span>•</span>
         <span>조회 {post.view_count}</span>
+        <span>•</span>
+        <span>{formatDetailDate(post.created_at)}</span>
       </div>
       <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950">
         {post.title}
