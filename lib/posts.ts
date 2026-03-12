@@ -998,6 +998,56 @@ export async function getBoardPostFeedBySlug(
   };
 }
 
+export async function getAllPostsFeed(options: PostFeedOptions = {}) {
+  const resolvedOptions = {
+    page: normalizePage(options.page),
+    pageSize: normalizePageSize(options.pageSize),
+    query: normalizeSearchQuery(options.query),
+  };
+  const supabase = await createSupabaseServer();
+
+  if (!supabase) {
+    const all = mockPosts
+      .filter((p) => !p.is_notice && !p.is_hidden)
+      .sort((a, b) => b.created_at.localeCompare(a.created_at));
+    const from = (resolvedOptions.page - 1) * resolvedOptions.pageSize;
+    return createPaginatedList(
+      all.slice(from, from + resolvedOptions.pageSize).map(getMockPostListItem),
+      resolvedOptions.page,
+      resolvedOptions.pageSize,
+      all.length,
+    );
+  }
+
+  const from = (resolvedOptions.page - 1) * resolvedOptions.pageSize;
+  const to = from + resolvedOptions.pageSize - 1;
+
+  let q = supabase
+    .from("posts")
+    .select(boardPostFeedSelect, { count: "exact" })
+    .eq("is_notice", false)
+    .eq("is_hidden", false)
+    .order("created_at", { ascending: false })
+    .range(from, to);
+
+  if (resolvedOptions.query) {
+    q = q.or(`title.ilike.%${resolvedOptions.query}%,content.ilike.%${resolvedOptions.query}%`);
+  }
+
+  const { data, error, count } = await q;
+
+  if (error || !data) {
+    return createPaginatedList([], resolvedOptions.page, resolvedOptions.pageSize, 0);
+  }
+
+  return createPaginatedList(
+    (data as SupabasePostFeedRow[]).map(toPostListItem),
+    resolvedOptions.page,
+    resolvedOptions.pageSize,
+    count ?? 0,
+  );
+}
+
 export async function getPostById(id: string) {
   const supabase = await createSupabaseServer();
 
