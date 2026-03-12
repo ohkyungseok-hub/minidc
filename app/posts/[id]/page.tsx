@@ -120,6 +120,14 @@ export default async function PostDetailPage({
           hasEmpathized={empathyState.hasEmpathized}
         />
 
+        <CommentList comments={comments} currentUserId={currentUser?.id} />
+
+        <CommentForm
+          postId={post.id}
+          currentUserId={currentUser?.id}
+          errorMessage={commentError}
+        />
+
         {/* 관련 글 — 내부 링크 */}
         {relatedPosts.length > 0 && (
           <aside className="rounded-2xl border border-[var(--line)] bg-white p-5">
@@ -164,13 +172,6 @@ export default async function PostDetailPage({
             </div>
           </aside>
         )}
-
-        <CommentForm
-          postId={post.id}
-          currentUserId={currentUser?.id}
-          errorMessage={commentError}
-        />
-        <CommentList comments={comments} currentUserId={currentUser?.id} />
       </div>
     </>
   );
